@@ -1,0 +1,39 @@
+-----------------------------------------------
+Helpful mathy things
+
+S0_1_2_3_4_S1   ->read in
+
+S0  _2   _3   _4   _5  _S1 ->Layout on the GUI
+ 0   1   2    3    4    5
+
+n+1 things on the track with n tracks
+-------------------------------------------------
+Track
+    - Inbox
+    - Name
+    - Left
+    - Right
+
+    Station
+    Switch
+
+Train
+
+Message
+    - Who sent it
+    - Who is it going to
+    - What is in the message
+    - SeekPath?
+    - ValidPath
+    - Lock information (Lock/unlock Track)
+
+If a good path is found then send the message back along the path.
+    - It has the path from the destination station and then all tracks/switches along the way
+    - It can be in a linked list since it can grow arbitrarily long.
+
+Logic
+
+
+
+GUI
+Rectangle
