@@ -8,7 +8,7 @@ S0  _2   _3   _4   _5  _S1 ->Layout on the GUI
 
 n+1 things on the track with n tracks
 -------------------------------------------------
-Track
+smarttrain.Track
     - Inbox
     - Name
     - Left
@@ -25,7 +25,7 @@ Message
     - What is in the message
     - SeekPath?
     - ValidPath
-    - Lock information (Lock/unlock Track)
+    - Lock information (Lock/unlock smarttrain.Track)
 
 If a good path is found then send the message back along the path.
     - It has the path from the destination station and then all tracks/switches along the way
