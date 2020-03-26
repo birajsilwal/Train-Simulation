@@ -1,11 +1,17 @@
 Smart smarttrain.Train 
 
 TODO
-- Read in the config file 
+- Read in the config file Chris
 
-- get a list of all of the components
+- get a list of all of the components Chris
 
-- make the track
+- Make objects Biraj 
+    - Track 
+    - Train 
+    - Message
+    - Station
+    
+- make the track 
 
 - While loop---------------------
 - Make a move
