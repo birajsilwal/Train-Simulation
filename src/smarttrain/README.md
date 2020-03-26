@@ -1,4 +1,4 @@
-Smart Train 
+Smart smarttrain.Train 
 
 TODO
 - Read in the config file 

@@ -17,7 +17,7 @@ Track
     Station
     Switch
 
-Train
+smarttrain.Train
 
 Message
     - Who sent it

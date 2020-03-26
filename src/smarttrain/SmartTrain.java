@@ -1,3 +1,5 @@
+package smarttrain;
+
 public class SmartTrain {
 
     public SmartTrain(){
