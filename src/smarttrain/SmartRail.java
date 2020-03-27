@@ -96,6 +96,5 @@ public class SmartRail {
     public static void main(String[] args) {
 
         SmartRail train = new SmartRail();
-        System.out.println("working");
     }
 }
