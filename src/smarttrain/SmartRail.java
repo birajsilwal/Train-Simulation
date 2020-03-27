@@ -94,6 +94,8 @@ public class SmartRail {
         //I have the list of switches
     }
     public static void main(String[] args) {
+
         SmartRail train = new SmartRail();
+        System.out.println("working");
     }
 }
