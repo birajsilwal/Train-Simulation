@@ -11,6 +11,7 @@ public class SmartRail {
     private List<Point> stations;
     private List<Point> switches;
 
+    /*Nested class used to mark the beginning of the objects*/
     class Point{
         int x;
         int y;
@@ -44,6 +45,9 @@ public class SmartRail {
         //move the train
         //End of while loop-------------
     }
+    /*
+    Reads in the file and makes LinkedLists for the tracks, stations, and switches
+     */
     private void readInTrack(){
         try {
             BufferedReader in = new BufferedReader(new FileReader("resources/simple.txt"));
@@ -68,7 +72,6 @@ public class SmartRail {
                             int xLength = (Integer.parseInt(arr[3])-startingX)/Integer.parseInt(arr[5]);
 
                             for(int i=0;i<Integer.parseInt(arr[5]);i++){
-                                //System.out.println(startingX);
                                 tracks.add(new Point(startingX,Integer.parseInt(arr[2])));
                                 startingX += xLength;
                             }

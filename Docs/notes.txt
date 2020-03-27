@@ -20,12 +20,17 @@ smarttrain.Track
 smarttrain.Train
 
 Message
-    - Who sent it
+    - Who sent it - I am going to assume that it is always going to originate from
+        the station that we want to go to
     - Who is it going to
+        - This is going to the station that the train is berthed in
+          at the moment
     - What is in the message
-    - SeekPath?
-    - ValidPath
-    - Lock information (Lock/unlock smarttrain.Track)
+        - Coordinates of the station we want to get to
+        - What direction we are trying to go to
+        - If we are seeking a path
+        - If we have found a path
+    - Lock information (Lock/unlock Track)
 
 If a good path is found then send the message back along the path.
     - It has the path from the destination station and then all tracks/switches along the way
