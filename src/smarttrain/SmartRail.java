@@ -1,14 +1,12 @@
 package smarttrain;
 
-import java.awt.*;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SmartTrain {
+public class SmartRail {
     private List<Point> tracks;
     private List<Point> stations;
     private List<Point> switches;
@@ -22,7 +20,7 @@ public class SmartTrain {
         }
     }
 
-    public SmartTrain(){
+    public SmartRail(){
         //Read in the config file
         readInTrack();
         int i=0;
@@ -96,6 +94,6 @@ public class SmartTrain {
         //I have the list of switches
     }
     public static void main(String[] args) {
-        SmartTrain train = new SmartTrain();
+        SmartRail train = new SmartRail();
     }
 }
