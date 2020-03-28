@@ -13,11 +13,16 @@ public class Track {
         this.name = name;
         this.left = left;
         this.right = right;
-        this.inbox = new LinkedBlockingQueue<Message>();
+        this.inbox = new LinkedBlockingQueue<String>();
     }
 
-    public void recieiveMessage(Message m){
+    public void recieiveMessage(String m){
         inbox.add(m);
     }
+
+    // define position of the track x and y and pass to the train
+
+    // able to send the message
+
 
 }

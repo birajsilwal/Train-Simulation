@@ -1,5 +1,5 @@
 /**@author Biraj Silwal and Christopher James Shelton **/
-package smarttrain;
+package smartrail;
 
 public class Train {
 
@@ -8,19 +8,26 @@ public class Train {
         private Station destination;
         private int speed;
         private Boolean canChangeDirection;
-        private Track track;
+        private Rail rail;
 
         public Train(Station source, Station destination, Boolean canChangeDirection) {
                 this.source = source;
                 this.destination = destination;
                 this.canChangeDirection = canChangeDirection;
-
         }
 
         public void moveTrain() {
                 // TODO: if there is a valid path, then move the train
+                // moving train to other track
                 // otherwise return false
+                // need positional data i.e. x y
+                // move train in one st. line
+
+                // animation timer () create separate class display class
+
         }
+
+        // setter src and dest
 
         /**@return source gives us the location of source*/
         public Station getSource() { return source; }
@@ -32,7 +39,7 @@ public class Train {
         public int getTrainId() { return this.trainId; }
 
         /**@return track returns the track*/
-        public Track getTrack() { return this.track; }
+        public Rail getRail() { return this.rail; }
 
 
 }
