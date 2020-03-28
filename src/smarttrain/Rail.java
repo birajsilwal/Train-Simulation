@@ -2,14 +2,14 @@ package smarttrain;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Track {
+public class Rail {
 
     private int name;
     private LinkedBlockingQueue<String> inbox;
-    private Track left;
-    private Track right;
+    private Rail left;
+    private Rail right;
 
-    public Track(int name, Track left, Track right){
+    public Rail(int name, Rail left, Rail right){
         this.name = name;
         this.left = left;
         this.right = right;
@@ -19,5 +19,11 @@ public class Track {
     public void recieiveMessage(String m){
         inbox.add(m);
     }
+
+    // define position of the track x and y and pass to the train
+
+    // able to send the message
+
+    //
 
 }
