@@ -3,13 +3,18 @@ package smartrail;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import static smartrail.Constants.*;
 
 public class MainController extends Application {
+    Display display = new Display();
 
     public static void main(String[] args) {
         launch(args);
@@ -22,18 +27,34 @@ public class MainController extends Application {
 
     /* GUI starts from here */
     private void initGUI(Stage primaryStage) {
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(10));
+        Pane pane = new Pane();
+        pane.setPadding(new Insets(20));
 
         Label title = new Label("SmartRail");
 
-        gridPane.add(title,0,0);
+        Rectangle train1 = display.drawTrain();
+        Rectangle station1l = display.drawStation();
+        Rectangle station1r = display.drawStation();
+        Rectangle track = display.drawTrack();
 
-        Scene scene = new Scene(gridPane,widthOfMainPane, heightOfMainPane);
+        title.relocate(100,10);
+        station1l.relocate(50,50);
+        station1r.relocate(600,50);
+        train1.relocate(100,50);
+        track.relocate(100,10);
+
+        display.moveTrain(train1);
+
+        pane.getChildren().add(title);
+        pane.getChildren().add(train1);
+        pane.getChildren().add(station1l);
+        pane.getChildren().add(station1r);
+        pane.getChildren().add(track);
+
+        Scene scene = new Scene(pane,widthOfMainPane, heightOfMainPane);
         primaryStage.setTitle("SmartRail");
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 }
