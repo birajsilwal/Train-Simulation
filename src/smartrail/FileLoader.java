@@ -1,4 +1,4 @@
-package smarttrain;
+package smartrail;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

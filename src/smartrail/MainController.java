@@ -1,4 +1,4 @@
-package smarttrain;
+package smartrail;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import static smartrail.Constants.*;
 
 public class MainController extends Application {
 
@@ -29,7 +31,7 @@ public class MainController extends Application {
 
         gridPane.add(title,0,0);
 
-        Scene scene = new Scene(gridPane,300, 300);
+        Scene scene = new Scene(gridPane,widthOfMainPane, heightOfMainPane);
         primaryStage.setTitle("SmartRail");
         primaryStage.setScene(scene);
         primaryStage.show();

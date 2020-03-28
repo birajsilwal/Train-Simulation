@@ -1,4 +1,4 @@
-package smarttrain;
+package smartrail;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -24,6 +24,5 @@ public class Rail {
 
     // able to send the message
 
-    //
 
 }

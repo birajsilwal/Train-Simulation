@@ -1,5 +1,5 @@
 /**@author Biraj Silwal and Christopher James Shelton **/
-package smarttrain;
+package smartrail;
 
 public class Train {
 
@@ -14,7 +14,6 @@ public class Train {
                 this.source = source;
                 this.destination = destination;
                 this.canChangeDirection = canChangeDirection;
-
         }
 
         public void moveTrain() {
