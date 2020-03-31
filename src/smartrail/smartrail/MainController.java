@@ -19,7 +19,8 @@ public class MainController extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        initGUI(primaryStage);
+        FileLoader fl = new FileLoader();
+        //initGUI(primaryStage);
     }
 
     /* GUI starts from here */

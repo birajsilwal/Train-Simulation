@@ -67,11 +67,12 @@ public class FileLoader {
                     case "track":
                         if(arr.length == 4){
                             //add the coordinates to tracks
+                            // S _ S
                             tracks.add(new Point(Integer.parseInt(arr[1]),Integer.parseInt(arr[2])));
                         }else{
                             int startingX = Integer.parseInt(arr[1]);
                             int xLength = (Integer.parseInt(arr[3])-startingX)/Integer.parseInt(arr[5]);
-
+                            // S _  _  _  _ S
                             for(int i=0;i<Integer.parseInt(arr[5]);i++){
                                 tracks.add(new Point(startingX,Integer.parseInt(arr[2])));
                                 startingX += xLength;
