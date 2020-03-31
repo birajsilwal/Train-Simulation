@@ -3,10 +3,7 @@ package smartrail;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -30,7 +27,7 @@ public class MainController extends Application {
         Pane pane = new Pane();
         pane.setPadding(new Insets(20));
 
-        Label title = new Label("SmartRail");
+        Label title = new Label("");
 
         Rectangle train1 = display.drawTrain();
         Rectangle station1l = display.drawStation();
@@ -52,7 +49,7 @@ public class MainController extends Application {
         pane.getChildren().add(track);
 
         Scene scene = new Scene(pane,widthOfMainPane, heightOfMainPane);
-        primaryStage.setTitle("SmartRail");
+        primaryStage.setTitle("");
         primaryStage.setScene(scene);
         primaryStage.show();
 

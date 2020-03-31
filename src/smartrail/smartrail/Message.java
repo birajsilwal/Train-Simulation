@@ -1,4 +1,4 @@
-package smarttrain;
+package smartrail;
 
 public class Message {
     int stationSent;

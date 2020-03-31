@@ -8,7 +8,7 @@ S0  _2   _3   _4   _5  _S1 ->Layout on the GUI
 
 n+1 things on the track with n tracks
 -------------------------------------------------
-smarttrain.Track
+smartrail.Track
     - Inbox
     - Name
     - Left

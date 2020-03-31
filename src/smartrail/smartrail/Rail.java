@@ -1,22 +1,22 @@
-package smarttrain;
+package smartrail;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Track {
+public class Rail {
 
     private int name;
     private LinkedBlockingQueue<Message> inbox;
-    private Track left;
-    private Track right;
+    private Rail left;
+    private Rail right;
 
-    public Track(int name, Track left, Track right){
+    public Rail(int name, Rail left, Rail right){
         this.name = name;
         this.left = left;
         this.right = right;
-        this.inbox = new LinkedBlockingQueue<String>();
+        this.inbox = new LinkedBlockingQueue<Message>();
     }
 
-    public void recieiveMessage(String m){
+    public void recieiveMessage(Message m){
         inbox.add(m);
     }
 
