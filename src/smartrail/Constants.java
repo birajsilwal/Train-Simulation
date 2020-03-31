@@ -4,8 +4,7 @@ package smartrail;
 * to make the code more cleaner */
 public interface Constants {
 
-    int widthOfMainPane = 500;
+    int widthOfMainPane = 850;
     int heightOfMainPane = 500;
-
 
 }

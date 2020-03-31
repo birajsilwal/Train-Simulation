@@ -21,7 +21,6 @@ public class Train {
                 // moving train to other track
                 // otherwise return false
                 // need positional data i.e. x y
-                // move train in one st. line
 
                 // animation timer () create separate class display class
 

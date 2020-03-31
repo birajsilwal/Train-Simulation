@@ -2,15 +2,18 @@ package smartrail;
 
 public class Station {
 
-    // define coordinate
-
     private Boolean isSource;
     private Boolean isDestination;
-    private double xcor;
-    private double ycor;
+    private double xcorStation;
+    private double ycorStation;
 
     public Station() {
         this.isSource = false;
         this.isDestination = false;
     }
+
+    public double getXcorStation() { return xcorStation; }
+
+    public double getYcorStation() { return ycorStation; }
+
 }
