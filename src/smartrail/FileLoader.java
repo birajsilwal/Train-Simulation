@@ -8,33 +8,14 @@ import java.util.List;
 
 public class FileLoader {
 
-    private List<Point> tracks;
-    private List<Point> stations;
-    private List<Point> switches;
-
-    /*Nested class used to mark the beginning of the objects*/
-    class Point{
-        int x;
-        int y;
-        public Point(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-    }
+    private List<LinkedList<Rail>> railSystem;
+    private List<Station> stations;
+    private List<Switch> switches;
+    private Station rootStation;
 
     public FileLoader(){
         //Read in the config file
         readInTrack();
-        int i=0;
-        for(Point p : tracks){
-            System.out.println("Track: " +i+ "["+ p.x + " " + p.y+"]");
-            i++;
-        }
-        i=0;
-        for(Point p : stations){
-            System.out.println("Station: " +i+ "["+ p.x + " " + p.y+"]");
-            i++;
-        }
 
         //make the track
         makeTrack();
@@ -53,9 +34,12 @@ public class FileLoader {
         try {
             BufferedReader in = new BufferedReader(new FileReader("resources/simple.txt"));
             String line = null;
-            tracks = new LinkedList<>();
+            railSystem = new LinkedList<>();
             stations = new LinkedList<>();
             switches = new LinkedList<>();
+            int railNum = 0;
+            int stationNum = 0;
+            int switchNum = 0;
 
             while((line = in.readLine())!=null && !line.equals("\n")&&
                     !line.equals(" ")) {
@@ -65,25 +49,52 @@ public class FileLoader {
                 }
                 switch (arr[0]){
                     case "track":
+                        //Holds a line of rails to be converted into Rails
+                        LinkedList<Point> rail = new LinkedList<>();
                         if(arr.length == 4){
                             //add the coordinates to tracks
                             // S _ S
-                            tracks.add(new Point(Integer.parseInt(arr[1]),Integer.parseInt(arr[2])));
+                            rail.add(new Point(Integer.parseInt(arr[1]),Integer.parseInt(arr[2])));
                         }else{
                             int startingX = Integer.parseInt(arr[1]);
                             int xLength = (Integer.parseInt(arr[3])-startingX)/Integer.parseInt(arr[5]);
                             // S _  _  _  _ S
                             for(int i=0;i<Integer.parseInt(arr[5]);i++){
-                                tracks.add(new Point(startingX,Integer.parseInt(arr[2])));
+                                rail.add(new Point(startingX,Integer.parseInt(arr[2])));
                                 startingX += xLength;
                             }
                         }
+                        //Make a bunch of independent Rails
+                        LinkedList<Rail> railTemp = new LinkedList<>();
+                        for(int i=0;i<rail.size();i++){
+                            railTemp.add(new Rail(railNum,rail.get(i)));
+                            railNum++;
+                        }
+                        if(railTemp.size() > 1){
+                            //join the rails together
+                            //Set the left neighbors
+                            for(int i=1;i<railTemp.size();i++){
+                                railTemp.get(i).setLeft(railTemp.get(i-1));
+                            }
+                            //Set the right neighbors
+                            for(int i=0;i<railTemp.size()-1;i++){
+                                railTemp.get(i).setRight(railTemp.get(i+1));
+                                railTemp.get(i).setEndPoint(railTemp.get(i+1).getStartPoint());
+                            }
+                        }
+                        railSystem.add(railTemp);
                         break;
                     case"station":
-                        stations.add(new Point(Integer.parseInt(arr[1]),Integer.parseInt(arr[2])));
+                        stations.add(new Station(stationNum,
+                                new Point(Integer.parseInt(arr[1]),
+                                        Integer.parseInt(arr[2]))));
+                        stationNum++;
                         break;
                     case"switch":
-                        switches.add(new Point(Integer.parseInt(arr[1]),Integer.parseInt(arr[2])));
+                        switches.add(new Switch(switchNum,
+                                new Point(Integer.parseInt(arr[1]),
+                                        Integer.parseInt(arr[2]))));
+                        switchNum++;
                         break;
                 }
             }
@@ -94,8 +105,43 @@ public class FileLoader {
         }
     }
     private void makeTrack(){
-        //I have the list of stations
-        //I have the list of tracks
-        //I have the list of switches
+        rootStation = null;
+//        for(LinkedList<Rail> rails : railSystem){
+//            for(Rail rail : rails) {
+//                System.out.println(rail);
+//            }
+//        }
+//        for(Station s : stations){
+//            System.out.println("Station: " + s);
+//        }
+        //Look through the Stations and see if any of the tracks will match up
+
+        //Make the stations connect where the coordinates match
+        for(Station s : stations){
+            for(LinkedList<Rail> rails : railSystem){
+                if(rails.get(0).getStartPoint().xcoor == s.getLocation().xcoor &&
+                        rails.get(0).getStartPoint().ycoor == s.getLocation().ycoor){
+                    if(rootStation == null){
+                        rootStation = s;
+                    }
+                    s.setRight(rails.get(0));
+                    rails.get(0).setLeft(s);
+                }
+            }
+        }
+        //Connect the stations that are 1 away to the right of the track
+        for(Station s : stations){
+            for(LinkedList<Rail> rails : railSystem){
+                if(rails.getLast().getStartPoint().xcoor == s.getLocation().xcoor-1 &&
+                        rails.getLast().getStartPoint().ycoor == s.getLocation().ycoor){
+                    s.setLeft(rails.getLast());
+                    rails.getLast().setEndPoint(s.getLocation());
+                    rails.getLast().setRight(s);
+                }
+            }
+        }
+    }
+    protected Station getRailSystem(){
+        return rootStation;
     }
 }

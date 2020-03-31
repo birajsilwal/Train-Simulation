@@ -1,5 +1,4 @@
-/**@author Biraj Silwal and Christopher James Shelton **/
-package smartrail;
+package smartrail; /**@author Biraj Silwal and Christopher James Shelton **/
 
 public class Train {
 

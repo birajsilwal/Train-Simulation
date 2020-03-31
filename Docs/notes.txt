@@ -14,12 +14,12 @@ smartrail.Track
     - Left
     - Right
 
-    Station
-    Switch
+    smartrail.Station
+    smartrail.Switch
 
-smarttrain.Train
+smarttrain.smartrail.Train
 
-Message
+smartrail.Message
     - Who sent it - I am going to assume that it is always going to originate from
         the station that we want to go to
     - Who is it going to

@@ -1,5 +1,7 @@
 package smartrail;
 
+
+
 public class Message {
     int stationSent;
     int stationTarget;

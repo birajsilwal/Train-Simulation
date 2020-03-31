@@ -1,4 +1,4 @@
-Smart smarttrain.Train 
+Smart smarttrain.smartrail.Train 
 
 TODO
 - Read in the config file Chris
@@ -7,9 +7,9 @@ TODO
 
 - Make objects Biraj 
     - Track 
-    - Train 
-    - Message
-    - Station
+    - smartrail.Train 
+    - smartrail.Message
+    - smartrail.Station
     
 - make the track 
 
