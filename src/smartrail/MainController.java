@@ -8,8 +8,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import static smartrail.Constants.*;
-
 public class MainController extends Application {
     Display display = new Display();
 
@@ -49,7 +47,7 @@ public class MainController extends Application {
         pane.getChildren().add(station1r);
         pane.getChildren().add(track);
 
-        Scene scene = new Scene(pane,widthOfMainPane, heightOfMainPane);
+        Scene scene = new Scene(pane, Constants.widthOfMainPane, Constants.heightOfMainPane);
         primaryStage.setTitle("");
         primaryStage.setScene(scene);
         primaryStage.show();

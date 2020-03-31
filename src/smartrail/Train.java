@@ -24,6 +24,10 @@ public class Train {
 
                 // animation timer () create separate class display class
 
+                // have to talk to station
+                // abstract messaging class
+                // message type
+
         }
 
         // setter src and dest
