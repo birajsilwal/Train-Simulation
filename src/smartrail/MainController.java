@@ -8,10 +8,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import java.util.LinkedList;
-
-import static smartrail.Constants.*;
-
 public class MainController extends Application {
     Display display = new Display();
 
@@ -22,17 +18,9 @@ public class MainController extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FileLoader fl = new FileLoader();
-        Station root = fl.getRailSystem();
-
         //initGUI(primaryStage);
-        printRails(root);
     }
-    private void printRails(Rail root){
-        System.out.println(root);
-        if(root.right != null){
-            printRails(root.right);
-        }
-    }
+
     /* GUI starts from here */
     private void initGUI(Stage primaryStage) {
         Pane pane = new Pane();
@@ -59,7 +47,7 @@ public class MainController extends Application {
         pane.getChildren().add(station1r);
         pane.getChildren().add(track);
 
-        Scene scene = new Scene(pane,widthOfMainPane, heightOfMainPane);
+        Scene scene = new Scene(pane, Constants.widthOfMainPane, Constants.heightOfMainPane);
         primaryStage.setTitle("");
         primaryStage.setScene(scene);
         primaryStage.show();

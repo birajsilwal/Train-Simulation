@@ -13,3 +13,6 @@ public class Message {
 
     }
 }
+
+
+// station, train, rail, switch all have to implement runnable
