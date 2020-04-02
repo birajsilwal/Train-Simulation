@@ -2,7 +2,7 @@
 Helpful mathy things
 
 S0_1_2_3_4_S1   ->read in
-
+T
 S0  _2   _3   _4   _5  _S1 ->Layout on the GUI
  0   1   2    3    4    5
 
@@ -19,7 +19,7 @@ smartrail.Track
 
 smarttrain.smartrail.Train
 
-smartrail.Message
+Message
     - Who sent it - I am going to assume that it is always going to originate from
         the station that we want to go to
     - Who is it going to
@@ -38,7 +38,14 @@ If a good path is found then send the message back along the path.
 
 Logic
 
-
+Click on the des Station
+    - StartStat makes message
+    - Message -> track0 ->track1->...->DesStation
+    - Valid path, or not valid path.
+    Options
+        1 - Send a new message back to the station
+        2 - send a message right to the train
+    Train departs
 
 GUI
 Rectangle
