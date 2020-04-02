@@ -19,6 +19,7 @@ public class Rail {
         startPoint = p;
         endPoint = null;
     }
+
     public void setLeft(Rail l){
         left = l;
     }

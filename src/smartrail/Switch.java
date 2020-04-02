@@ -16,12 +16,14 @@ public class Switch {
         inbox = new LinkedBlockingQueue<Message>();
         startPoint = p;
     }
+
     public void setLeft(Rail l){
         left = l;
     }
     public void setRight(Rail r){
         right = r;
     }
+
     @Override
     public String toString(){
         return name + " " + startPoint.xcoor + " " + startPoint.ycoor;
