@@ -3,11 +3,13 @@ package smartrail;
 
 
 public class Message {
-    private Point stationSent;
-    private Point stationTarget;
-    private String purpose;
-    private boolean validPath;
-    private boolean seekPath;
+    Point stationSent;
+    Point stationTarget;
+    String purpose; //"pathSeek"
+    boolean validPath;
+    boolean seekPath;
+    boolean travelingRight;
+    LinkedList<Rail> path;//The path that the train follows
 
     public Message(){
 
