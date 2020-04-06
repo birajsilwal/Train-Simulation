@@ -1,4 +1,8 @@
-package smartrail; /**@author Biraj Silwal and Christopher James Shelton **/
+package smartrail;
+
+import java.util.concurrent.LinkedBlockingQueue;
+
+/**@author Biraj Silwal and Christopher James Shelton **/
 
 public class Train {
 
@@ -8,13 +12,20 @@ public class Train {
         private int speed;
         private Boolean canChangeDirection;
         private Rail rail;
+        protected LinkedBlockingQueue<Message> inbox;
 
-        public Train(Station source, Station destination, Boolean canChangeDirection) {
-                this.source = source;
-                this.destination = destination;
-                this.canChangeDirection = canChangeDirection;
+        public Train(){
+                inbox = new LinkedBlockingQueue<>();
         }
-
+        public Train(Station source, Station destination, Boolean canChangeDirection) {
+                source = source;
+                destination = destination;
+                canChangeDirection = canChangeDirection;
+                inbox = new LinkedBlockingQueue<>();
+        }
+        public void setStartRail(Rail r){
+                rail = r;
+        }
         public void moveTrain() {
                 // TODO: if there is a valid path, then move the train
                 // moving train to other track
@@ -29,8 +40,28 @@ public class Train {
 
         }
 
-        // setter src and dest
+        public void receiveMessage(Message m){
+                System.out.println("Train: New Message");
+                inbox.add(m);
+                this.processMessage();
+        }
+        public void processMessage(){
+                System.out.println("Processing a message");
+                if(inbox.size()>0) {
+                        Message m = inbox.remove();
+                        if (m.seekPath && !m.validPath) {//Just received a new destination station
+                                m.stationSent = null;
+                                System.out.println("Train: We have received a new target");
+                                rail.receiveMessage(m);
+                        }
+                        else if (m.validPath && !m.seekPath) {//we have found a valid path to travel from A->B
+                                //Time to move
+                                System.out.println("Train: We have found a valid path and its time to move");
+                        }
+                }
+        }
 
+        // setter src and dest
         /**@return source gives us the location of source*/
         public Station getSource() { return source; }
 

@@ -21,11 +21,19 @@ public class MainController extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FileLoader fl = new FileLoader();
+        Train train = new Train();
+        FileLoader fl = new FileLoader(train);
         Station root = fl.getRailSystem();
-
+        train.setStartRail(root);
+        Rail thisStation = root;
+        while(thisStation.right != null) {
+            thisStation = thisStation.right;
+        }
+        Station s = (Station)thisStation;
+        s.selectedAsTarget();
+        train.processMessage();
         //initGUI(primaryStage);
-        printRails(root);
+        //printRails(root);
     }
     private void printRails(Rail root){
         System.out.println(root);

@@ -13,9 +13,9 @@ public class FileLoader {
     private List<Switch> switches;
     private Station rootStation;//We will have to increase this to an array later to deal with parallel tracks
 
-    public FileLoader(){
+    public FileLoader(Train t){
         //Read in the config file
-        readInTrack();
+        readInTrack(t);
         //make the track
         makeTrack();
         //While loop---------------------
@@ -29,7 +29,7 @@ public class FileLoader {
     /*
     Reads in the file and makes LinkedLists for the tracks, stations, and switches
      */
-    private void readInTrack(){
+    private void readInTrack(Train train){
         try {
             BufferedReader in = new BufferedReader(new FileReader("resources/simple.txt"));
             String line = null;
@@ -66,7 +66,7 @@ public class FileLoader {
                         //Make a bunch of independent Rails
                         LinkedList<Rail> railTemp = new LinkedList<>();
                         for(int i=0;i<rail.size();i++){
-                            railTemp.add(new Rail(railNum,rail.get(i)));
+                            railTemp.add(new Rail(railNum,rail.get(i),train));
                             railNum++;
                         }
                         if(railTemp.size() > 1){
@@ -86,7 +86,7 @@ public class FileLoader {
                     case"station":
                         stations.add(new Station(stationNum,
                                 new Point(Integer.parseInt(arr[1]),
-                                        Integer.parseInt(arr[2]))));
+                                        Integer.parseInt(arr[2])),train));
                         stationNum++;
                         break;
                     case"switch":

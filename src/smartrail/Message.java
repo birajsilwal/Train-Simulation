@@ -1,24 +1,28 @@
 package smartrail;
-
-
+import java.util.LinkedList;
 
 public class Message {
-    Point stationSent;
-    Point stationTarget;
-    String purpose; //"pathSeek"
+    Rail stationSent;
+    Rail stationTarget;
     boolean validPath;
     boolean seekPath;
     boolean travelingRight;
     LinkedList<Rail> path;//The path that the train follows
 
     public Message(){
-
+        path = new LinkedList<>();
     }
-
-    public String setPurpose() { return purpose; }
-
-    public Point setStationSent(double xCor, double yCor) {
-
+    public void addToPath(Rail rail){
+        path.add(rail);
+    }
+    public void clearPath(){
+        path = null;
+    }
+    public void setStationSent(Rail station) {
+        stationSent = station;
+    }
+    public void setStationTarget(Rail station){
+        stationTarget = station;
     }
 
     public boolean isSeekPath() { return true; }
