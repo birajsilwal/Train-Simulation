@@ -7,11 +7,25 @@ TODO
 
 - Make objects Biraj 
     - Track 
-    - smartrail.Train 
-    - smartrail.Message
-    - smartrail.Station
+    - Train 
+    - Message
+    - Rail->Station
     
 - make the track 
+   
+   
+- Thread the program
+    - Get the messages to pass 
+    - Get input
+    - Move the train 
+    - Get more complex tracks
+    - GUI 
+    - Polish
+    - Project diagram and write up
+   
+
+
+
 
 - While loop---------------------
 - Make a move
