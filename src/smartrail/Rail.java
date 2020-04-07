@@ -2,7 +2,7 @@ package smartrail;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Rail {
+public class Rail implements Runnable{
 
     protected int name;
     protected LinkedBlockingQueue<Message> inbox;
@@ -13,6 +13,7 @@ public class Rail {
     protected Point startPoint;
     protected Point endPoint;
     protected Train train;
+    protected boolean running;
 
     public Rail(int n,Point p,Train t){
         name = n;
@@ -24,6 +25,7 @@ public class Rail {
         startPoint = p;
         endPoint = null;
         train = t;
+        running = false;
     }
 
     public void setLeft(Rail l){
@@ -38,34 +40,47 @@ public class Rail {
     public Point getStartPoint(){
         return startPoint;
     }
-    public void receiveMessage(Message m){
+    public synchronized void receiveMessage(Message m){
         System.out.println(this + " received message");
         inbox.add(m);
-        this.processMessage();
+        notifyAll();
+        //this.processMessage();
     }
-    public void processMessage(){
+    public synchronized void processMessage() {
+        while (inbox.isEmpty()) {
+            try {
+                //sleep()  ??
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         System.out.println(this + " processing message");
+        notifyAll();
         Message m = inbox.remove();
         //Who is it from
-        if(m.stationSent == null) {//it was from the train
-            if(left == null){
+        if (m.stationSent == null) {//it was from the train
+            if (left == null) {
                 m.travelingRight = true;
             }
         }
-        if(m.seekPath){
+        if (m.seekPath) {
             //You have not found the place you want to be and the message needs to keep going
-            if(m.travelingRight){
+            if (m.travelingRight) {
                 m.addToPath(this);
                 m.stationSent = this;
                 right.receiveMessage(m);
-                if(rightSwitch != null){rightSwitch.receiveMessage(m);}
-            }
-            else{
+                if (rightSwitch != null) {
+                    rightSwitch.receiveMessage(m);
+                }
+            } else {
                 m.addToPath(this);
                 m.stationSent = this;
                 left.receiveMessage(m);
-                if(leftSwitch != null){leftSwitch.receiveMessage(m);}
+                if (leftSwitch != null) {
+                    leftSwitch.receiveMessage(m);
                 }
+            }
         }
     }
 
@@ -76,6 +91,15 @@ public class Rail {
         } else {
             return name + " [" + startPoint.xcoor + "," + startPoint.ycoor + "]-> null";
         }
+    }
+
+    @Override
+    public void run() {
+        System.out.println(this + " is running");
+//        while (! Thread . interrupted ()) {
+//            processMessage();
+//        }
+        processMessage();
     }
 
     // define position of the track x and y and pass to the train

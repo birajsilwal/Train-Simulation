@@ -46,50 +46,65 @@ public class Station extends Rail{
     }
 
     @Override
-    public void receiveMessage(Message m){
+    public synchronized void receiveMessage(Message m){
         System.out.println(this + " received message");
         inbox.add(m);
-        this.processMessage();
+        notifyAll();
+        //this.processMessage();
     }
     @Override
-    public void processMessage(){
-        System.out.println(this+ " Processing message");
-        if(inbox.size()>0) {
-            Message m = inbox.remove();
-            //Who is it from
-            if (m.seekPath) {
-                //You have found the place you want to be
-                if (m.stationTarget.startPoint.xcoor == startPoint.xcoor && m.stationTarget.startPoint.ycoor == startPoint.ycoor) {
-                    System.out.println("You found me, sending a message back to the train");
-                    m.addToPath(this);
-                    m.seekPath = false;
-                    m.validPath = true;
-                    train.receiveMessage(m);
-                }
-                //You are looking for a path from here
-                else if(m.seekPath && !m.validPath){
-                    if(right != null){
-                        m.travelingRight = true;
-                        m.stationSent = this;
-                        m.addToPath(this);
-                        right.receiveMessage(m);
-                    }else{
-                        m.stationSent = this;
-                        m.addToPath(this);
-                        left.receiveMessage(m);
-                    }
-                }
-                //You have not found the destination and you need to tell the train
-                else {
-                    System.out.println("You are at "+this+" and it is not a valid path");
-                    m.validPath = false;
-                    m.seekPath = false;
-                    m.clearPath();
-                    train.receiveMessage(m);
-                }
+    public synchronized void processMessage() {
+        while (inbox.isEmpty()) {
+            try {
+                //sleep()  ??
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-
+        System.out.println(this + " Processing message");
+        Message m = inbox.remove();
+        notifyAll();
+        //Who is it from
+        if (m.seekPath) {
+            //You have found the place you want to be
+            if (m.stationTarget.startPoint.xcoor == startPoint.xcoor && m.stationTarget.startPoint.ycoor == startPoint.ycoor) {
+                System.out.println("You found me, sending a message back to the train");
+                m.addToPath(this);
+                m.seekPath = false;
+                m.validPath = true;
+                train.receiveMessage(m);
+            }
+            //You are looking for a path from here
+            else if (m.seekPath && !m.validPath) {
+                if (right != null) {
+                    m.travelingRight = true;
+                    m.stationSent = this;
+                    m.addToPath(this);
+                    right.receiveMessage(m);
+                } else {
+                    m.stationSent = this;
+                    m.addToPath(this);
+                    left.receiveMessage(m);
+                }
+            }
+            //You have not found the destination and you need to tell the train
+            else {
+                System.out.println("You are at " + this + " and it is not a valid path");
+                m.validPath = false;
+                m.seekPath = false;
+                m.clearPath();
+                train.receiveMessage(m);
+            }
+        }
+    }
+    @Override
+    public void run() {
+        System.out.println(this + " is running");
+//        while (! Thread . interrupted ()) {
+//            processMessage();
+//        }
+        processMessage();
     }
     @Override
     public String toString(){

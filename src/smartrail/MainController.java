@@ -9,6 +9,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.LinkedList;
+import java.util.Map;
 
 import static smartrail.Constants.*;
 
@@ -26,14 +27,31 @@ public class MainController extends Application {
         Station root = fl.getRailSystem();
         train.setStartRail(root);
         Rail thisStation = root;
+
+        Thread trainThread = new Thread(train);
+        trainThread.start();
+
+        startThreads(root);
+
         while(thisStation.right != null) {
             thisStation = thisStation.right;
         }
         Station s = (Station)thisStation;
         s.selectedAsTarget();
         train.processMessage();
+        Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();
         //initGUI(primaryStage);
         //printRails(root);
+    }
+    private void startThreads(Rail root){
+        Thread newThread = new Thread(root);
+        root.running = true;
+        newThread.start();
+        if(root.right != null && !root.right.running){ startThreads(root.right);}
+        if(root.left != null && !root.left.running){ startThreads(root.left);}
+//        if(!root.rightSwitch.running){ startThreads(root.rightSwitch);
+//        if(!root.leftSwitch.running){ startThreads(root.leftSwitch);
+
     }
     private void printRails(Rail root){
         System.out.println(root);
