@@ -33,7 +33,7 @@ public class Station extends Rail{
     }
 
     private Message createMessage(){
-        Message m = new Message();
+        SeekMessage m = new SeekMessage();
         m.setStationSent(this);
         m.stationTarget= this;
         m.seekPath = true;
@@ -63,39 +63,52 @@ public class Station extends Rail{
             }
         }
         System.out.println(this + " Processing message");
-        Message m = inbox.remove();
-        notifyAll();
-        //Who is it from
-        if (m.seekPath) {
-            //You have found the place you want to be
-            if (m.stationTarget.startPoint.xcoor == startPoint.xcoor && m.stationTarget.startPoint.ycoor == startPoint.ycoor) {
-                System.out.println("You found me, sending a message back to the train");
-                m.addToPath(this);
-                m.seekPath = false;
-                m.validPath = true;
-                train.receiveMessage(m);
-            }
-            //You are looking for a path from here
-            else if (m.seekPath && !m.validPath) {
-                if (right != null) {
-                    m.travelingRight = true;
-                    m.stationSent = this;
+        try {
+            SeekMessage m = (SeekMessage)inbox.remove();
+
+            notifyAll();
+            //Who is it from
+            if (m.seekPath) {
+                //You have found the place you want to be
+                if (m.stationTarget.startPoint.xcoor == startPoint.xcoor && m.stationTarget.startPoint.ycoor == startPoint.ycoor) {
+                    System.out.println("You found me, sending a message back to the train");
                     m.addToPath(this);
-                    right.receiveMessage(m);
-                } else {
-                    m.stationSent = this;
-                    m.addToPath(this);
-                    left.receiveMessage(m);
+                    m.seekPath = false;
+                    m.validPath = true;
+                    train.receiveMessage(m);
+                }
+                //You are looking for a path from here
+                else if (m.seekPath && !m.validPath) {
+                    if (right != null) {
+                        m.travelingRight = true;
+                        m.stationSent = this;
+                        m.addToPath(this);
+                        right.receiveMessage(m);
+                    } else {
+                        m.stationSent = this;
+                        m.addToPath(this);
+                        left.receiveMessage(m);
+                    }
+                }
+                //You have not found the destination and you need to tell the train
+                else {
+                    System.out.println("You are at " + this + " and it is not a valid path");
+                    m.validPath = false;
+                    m.seekPath = false;
+                    m.clearPath();
+                    train.receiveMessage(m);
                 }
             }
-            //You have not found the destination and you need to tell the train
-            else {
-                System.out.println("You are at " + this + " and it is not a valid path");
-                m.validPath = false;
-                m.seekPath = false;
-                m.clearPath();
-                train.receiveMessage(m);
+        }catch(Exception e){
+            TravelMessage m = (TravelMessage)inbox.remove();
+            if(!hasTheTrain && m.newRail == this){
+                System.out.println("Yay! You made it to the station");
+                m.validDestination = true;
+            }else{
+                System.out.println("This is not the right station!");
             }
+            train.receiveMessage(m);
+
         }
     }
     @Override
