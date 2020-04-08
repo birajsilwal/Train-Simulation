@@ -87,6 +87,7 @@ public class FileLoader {
                         stations.add(new Station(stationNum,
                                 new Point(Integer.parseInt(arr[1]),
                                         Integer.parseInt(arr[2])),train));
+                        // draw here - option 1 - fileloader would need reference to display
                         stationNum++;
                         break;
                     case"switch":

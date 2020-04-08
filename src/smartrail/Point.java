@@ -4,7 +4,8 @@ package smartrail;
 public class Point{
     int xcoor;
     int ycoor;
-    public Point(int x, int y){
+
+    public Point(int x, int y) {
         xcoor = x;
         ycoor = y;
     }

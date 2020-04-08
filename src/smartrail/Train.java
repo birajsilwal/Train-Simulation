@@ -10,26 +10,30 @@ public class Train implements Runnable{
         private int trainId;
         private Station source;
         private Station destination;
+        private Boolean canChangeDirection;
         private int speed;
         private Boolean travelRight;
         private Rail rail;
         protected LinkedBlockingQueue<Message> inbox;
         protected LinkedList<Rail> path;
 
-        public Train(){
+        public Train() {
                 inbox = new LinkedBlockingQueue<>();
                 travelRight = false;
         }
-        public Train(Station source, Station destination, Boolean canChangeDirection) {
-                source = source;
-                destination = destination;
-                canChangeDirection = canChangeDirection;
+
+        public Train(Station s, Station d, Boolean ccd) {
+                s = source;
+                d = destination;
+                ccd = canChangeDirection;
                 inbox = new LinkedBlockingQueue<>();
                 path = new LinkedList<>();
         }
-        public void setStartRail(Rail r){
+
+        public void setStartRail(Rail r) {
                 rail = r;
         }
+
         public synchronized void moveTrain(LinkedList<Rail> p) {
                 // TODO: if there is a valid path, then move the train
 //                System.out.println("We are in moveTrain");
@@ -55,6 +59,7 @@ public class Train implements Runnable{
                 //processMessage();//Put me back on wait
 
         }
+
         private synchronized void updateLocation(Rail newRail, Rail oldRail,boolean arrived){
                 //Move to the new rail
                 rail = newRail;
@@ -70,12 +75,14 @@ public class Train implements Runnable{
                         moveTrain(path);
                 }
         }
+
         public synchronized void receiveMessage(Message m){
 //                System.out.println("Train: New Message");
                 inbox.add(m);
                 notifyAll();
                 //processMessage();
         }
+
         public synchronized void processMessage() {
                 while (inbox.isEmpty()) {
                         try {
