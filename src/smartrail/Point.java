@@ -8,4 +8,8 @@ public class Point{
         xcoor = x;
         ycoor = y;
     }
+    @Override
+    public String toString(){
+        return "["+ xcoor + "," + ycoor + "]";
+    }
 }

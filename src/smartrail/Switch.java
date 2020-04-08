@@ -2,30 +2,29 @@ package smartrail;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Switch {
-    private int name;
-    private LinkedBlockingQueue<Message> inbox;
-    private Rail left;
-    private Rail right;
-    private Point startPoint;
+public class Switch extends Rail{
+//    protected int name;
+//    protected LinkedBlockingQueue<Message> inbox;
+//    protected Rail left;
+//    protected Rail right;
+//    protected Point startPoint;
+//    protected Point endPoint;
 
-    public Switch(int n,Point p){
-        name = n;
-        left = null;
-        right = null;
-        inbox = new LinkedBlockingQueue<Message>();
-        startPoint = p;
+    public Switch(int n,Point p,Train t){
+        super(n,p,t);
+//        name = n;
+//        left = null;
+//        right = null;
+//        inbox = new LinkedBlockingQueue<Message>();
+//        startPoint = p;
     }
 
-    public void setLeft(Rail l){
-        left = l;
-    }
-    public void setRight(Rail r){
-        right = r;
+    public void setEndPoint(Point p){
+        endPoint = p;
     }
 
     @Override
     public String toString(){
-        return name + " " + startPoint.xcoor + " " + startPoint.ycoor;
+        return name + " " + startPoint + " " + endPoint;
     }
 }

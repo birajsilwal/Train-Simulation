@@ -40,9 +40,11 @@ public class Station extends Rail{
         m.validPath = false;
         return m;
     }
-    public void selectedAsTarget(){
+    public synchronized void selectedAsTarget(){
         //When selected, create a message and send it to the train
-        train.receiveMessage(createMessage());
+        Message m = createMessage();
+        train.receiveMessage(m);
+        System.out.println("Exit selectAsTarget");
     }
 
     @Override
@@ -50,13 +52,12 @@ public class Station extends Rail{
 //        System.out.println(this + " received message");
         inbox.add(m);
         notifyAll();
-        processMessage();
+//        processMessage();
     }
     @Override
     public synchronized void processMessage() {
         while (inbox.isEmpty()) {
             try {
-                //sleep()  ??
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -72,7 +73,7 @@ public class Station extends Rail{
             if (m.seekPath) {
                 //You have found the place you want to be
                 if (m.stationTarget.startPoint.xcoor == startPoint.xcoor && m.stationTarget.startPoint.ycoor == startPoint.ycoor) {
-                    System.out.println("You found me, sending a message back to the train");
+                    //System.out.println("You found me, sending a message back to the train");
                     m.addToPath(this);
                     m.seekPath = false;
                     m.validPath = true;
@@ -115,14 +116,13 @@ public class Station extends Rail{
 
         }
     }
-    @Override
-    public void run() {
-//        System.out.println(this + " is running");
-//        while (! Thread . interrupted ()) {
+//    @Override
+//    public void run() {
+////        System.out.println(this + " is running");
+//        while (Thread.currentThread().isAlive()) {
 //            processMessage();
 //        }
-        processMessage();
-    }
+//    }
     @Override
     public String toString(){
         if (right != null) {

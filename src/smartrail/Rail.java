@@ -43,15 +43,12 @@ public class Rail implements Runnable{
         return startPoint;
     }
     public synchronized void receiveMessage(Message m){
-        System.out.println(this + " received message");
         inbox.add(m);
         notifyAll();
-        processMessage();
     }
     public synchronized void processMessage() {
         while (inbox.isEmpty()) {
             try {
-                //sleep()  ??
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -93,7 +90,7 @@ public class Rail implements Runnable{
 //            System.out.println(this + "Just got a travel message");
             TravelMessage m = (TravelMessage)inbox.remove();
             if(!hasTheTrain && m.newRail == this){
-                System.out.println("Yay! You found the right rial, move on me");
+               // System.out.println("Yay! You found the right rial, move on me");
                 m.validDestination = true;
             }else{
                 System.out.println("I am not the rail you are looking for, I will let the train know");
@@ -114,10 +111,9 @@ public class Rail implements Runnable{
     @Override
     public void run() {
 //        System.out.println(this + " is running");
-//        while (! Thread . interrupted ()) {
-//            processMessage();
-//        }
-        processMessage();
+        while (Thread.currentThread().isAlive()) {
+                        processMessage();
+                }
     }
 
     // define position of the track x and y and pass to the train

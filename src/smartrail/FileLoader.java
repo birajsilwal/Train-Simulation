@@ -31,7 +31,7 @@ public class FileLoader {
      */
     private void readInTrack(Train train){
         try {
-            BufferedReader in = new BufferedReader(new FileReader("resources/simple.txt"));
+            BufferedReader in = new BufferedReader(new FileReader("resources/simple_switch.txt"));
             String line = null;
             railSystem = new LinkedList<>();
             stations = new LinkedList<>();
@@ -92,7 +92,7 @@ public class FileLoader {
                     case"switch":
                         switches.add(new Switch(switchNum,
                                 new Point(Integer.parseInt(arr[1]),
-                                        Integer.parseInt(arr[2]))));
+                                        Integer.parseInt(arr[2])),train));
                         switchNum++;
                         break;
                 }
@@ -136,6 +136,23 @@ public class FileLoader {
                     s.setLeft(rails.getLast());
                     rails.getLast().setEndPoint(s.getLocation());
                     rails.getLast().setRight(s);
+                }
+            }
+        }
+        //Set the switches
+        for(LinkedList<Rail> rails : railSystem){
+            for(Rail r:rails) {
+                for (Switch s : switches) {
+                    if (r.startPoint.xcoor == s.startPoint.xcoor && r.startPoint.ycoor == s.startPoint.ycoor){
+                        System.out.println("Startpoint " + r.startPoint);
+                        r.rightSwitch = s;
+                        s.left = r;
+                    }
+                    else if(s.right == null && r.startPoint.xcoor == s.startPoint.xcoor+1 && r.startPoint.ycoor > s.startPoint.ycoor){
+                        System.out.println("Endpoint " + r);
+                        s.right = r;
+                        r.leftSwitch = s;
+                    }
                 }
             }
         }

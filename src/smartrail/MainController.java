@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 import static smartrail.Constants.*;
 
@@ -34,15 +35,29 @@ public class MainController extends Application {
         startThreads(root);
 
         while(thisStation.right != null) {
-            thisStation = thisStation.right;
+            if(thisStation.rightSwitch != null){
+                thisStation = thisStation.rightSwitch;
+            }else{
+                thisStation = thisStation.right;
+            }
         }
         Station s = (Station)thisStation;
         s.selectedAsTarget();
-        train.processMessage();
-        Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();
+        //train.processMessage();
+        //printThreads();
         //initGUI(primaryStage);
         //printRails(root);
     }
+
+    private void printThreads() {
+        Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();
+        System.out.println("Threads running " + threads.size());
+        Set keySet = threads.keySet();
+        for(Object th :keySet){
+            System.out.println(th);
+        }
+    }
+
     private void startThreads(Rail root){
         Thread newThread = new Thread(root);
         root.running = true;

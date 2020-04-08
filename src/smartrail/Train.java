@@ -52,7 +52,7 @@ public class Train implements Runnable{
                 // have to talk to station
                 // abstract messaging class
                 // message type
-                processMessage();//Put me back on wait
+                //processMessage();//Put me back on wait
 
         }
         private synchronized void updateLocation(Rail newRail, Rail oldRail,boolean arrived){
@@ -65,7 +65,7 @@ public class Train implements Runnable{
                 //Am I on the intended rail?
                 if(arrived){//yes, then stop the traveling and wait
                         System.out.println("Final Location: " + rail);
-                        processMessage();
+                        //processMessage();
                 }else{//Keep moving
                         moveTrain(path);
                 }
@@ -74,7 +74,7 @@ public class Train implements Runnable{
 //                System.out.println("Train: New Message");
                 inbox.add(m);
                 notifyAll();
-                processMessage();
+                //processMessage();
         }
         public synchronized void processMessage() {
                 while (inbox.isEmpty()) {
@@ -145,9 +145,9 @@ public class Train implements Runnable{
         @Override
         public void run() {
                 System.out.println("Train has started");
-//                while (! Thread . interrupted ()) {
-//                        processMessage();
-//                }
-                processMessage();
+                while (Thread.currentThread().isAlive()) {
+                        processMessage();
+                }
+                //processMessage();
         }
 }
