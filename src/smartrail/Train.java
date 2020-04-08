@@ -76,6 +76,7 @@ public class Train implements Runnable{
                                 e.printStackTrace();
                         }
                 }
+
                 System.out.println("Train Processing a message");
 
                 try{//Is it a seek message?
