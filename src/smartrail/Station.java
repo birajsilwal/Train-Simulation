@@ -47,10 +47,10 @@ public class Station extends Rail{
 
     @Override
     public synchronized void receiveMessage(Message m){
-        System.out.println(this + " received message");
+//        System.out.println(this + " received message");
         inbox.add(m);
         notifyAll();
-        //this.processMessage();
+        processMessage();
     }
     @Override
     public synchronized void processMessage() {
@@ -62,9 +62,10 @@ public class Station extends Rail{
                 e.printStackTrace();
             }
         }
-        System.out.println(this + " Processing message");
-        try {
-            SeekMessage m = (SeekMessage)inbox.remove();
+        SeekMessage tempM = new SeekMessage();
+        if(inbox.peek().getClass().isInstance(tempM)) {
+//            System.out.println(this + " has a seek message");
+            SeekMessage m = (SeekMessage) inbox.remove();
 
             notifyAll();
             //Who is it from
@@ -99,13 +100,16 @@ public class Station extends Rail{
                     train.receiveMessage(m);
                 }
             }
-        }catch(Exception e){
+        }
+        else{
             TravelMessage m = (TravelMessage)inbox.remove();
             if(!hasTheTrain && m.newRail == this){
                 System.out.println("Yay! You made it to the station");
                 m.validDestination = true;
+                m.arrivedAtDestination = true;
             }else{
                 System.out.println("This is not the right station!");
+                m.validDestination = false;
             }
             train.receiveMessage(m);
 
@@ -113,7 +117,7 @@ public class Station extends Rail{
     }
     @Override
     public void run() {
-        System.out.println(this + " is running");
+//        System.out.println(this + " is running");
 //        while (! Thread . interrupted ()) {
 //            processMessage();
 //        }

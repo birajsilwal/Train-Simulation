@@ -46,7 +46,7 @@ public class Rail implements Runnable{
         System.out.println(this + " received message");
         inbox.add(m);
         notifyAll();
-        //this.processMessage();
+        processMessage();
     }
     public synchronized void processMessage() {
         while (inbox.isEmpty()) {
@@ -57,11 +57,14 @@ public class Rail implements Runnable{
                 e.printStackTrace();
             }
         }
-        System.out.println(this + " processing message");
+//        System.out.println(this + " processing message");
         notifyAll();
-        try {
+        //Is it a seek message?
+        SeekMessage tempM = new SeekMessage();
+        if(inbox.peek().getClass().isInstance(tempM)) {
+//            System.out.println(this + " has a seek message");
 
-            SeekMessage m = (SeekMessage)inbox.remove();
+            SeekMessage m = (SeekMessage) inbox.remove();
             //Who is it from
             if (m.stationSent == null) {//it was from the train
                 if (left == null) {
@@ -86,7 +89,8 @@ public class Rail implements Runnable{
                     }
                 }
             }
-        }catch(Exception e){
+        }else{
+//            System.out.println(this + "Just got a travel message");
             TravelMessage m = (TravelMessage)inbox.remove();
             if(!hasTheTrain && m.newRail == this){
                 System.out.println("Yay! You found the right rial, move on me");
@@ -109,7 +113,7 @@ public class Rail implements Runnable{
 
     @Override
     public void run() {
-        System.out.println(this + " is running");
+//        System.out.println(this + " is running");
 //        while (! Thread . interrupted ()) {
 //            processMessage();
 //        }

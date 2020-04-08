@@ -6,6 +6,7 @@ public class SeekMessage extends Message {
     Rail stationTarget;
     boolean validPath;
     boolean seekPath;
+    //boolean travelRight;
     //LinkedList<Rail> path;//The path that the train follows
 
     public SeekMessage(){

@@ -32,13 +32,16 @@ public class Train implements Runnable{
         }
         public synchronized void moveTrain(LinkedList<Rail> p) {
                 // TODO: if there is a valid path, then move the train
+//                System.out.println("We are in moveTrain");
                 path = p;
                 // moving train to other track
                 if(travelRight) {
-                        TravelMessage m = new TravelMessage(rail, rail.right);
+//                        System.out.println("We want to move right");
+                        TravelMessage m = new TravelMessage(rail.right, rail);
                         rail.right.receiveMessage(m);
                 }else{
-                        TravelMessage m = new TravelMessage(rail, rail.left);
+//                        System.out.println("We want to move left");
+                        TravelMessage m = new TravelMessage(rail.left, rail);
                         rail.left.receiveMessage(m);
                 }
                 // otherwise return false
@@ -49,23 +52,29 @@ public class Train implements Runnable{
                 // have to talk to station
                 // abstract messaging class
                 // message type
+                processMessage();//Put me back on wait
 
         }
-        private synchronized void updateLocation(Rail newRail, Rail oldRail){
+        private synchronized void updateLocation(Rail newRail, Rail oldRail,boolean arrived){
                 //Move to the new rail
                 rail = newRail;
                 //Let the rail know that I am on him
-                newRail.hasTheTrain = true;
+                rail.hasTheTrain = true;
                 oldRail.hasTheTrain = false;
+                path.remove(oldRail);
                 //Am I on the intended rail?
-                //yes, then stop the traveling
-
-                //No, make a new message and send it to the next rail
+                if(arrived){//yes, then stop the traveling and wait
+                        System.out.println("Final Location: " + rail);
+                        processMessage();
+                }else{//Keep moving
+                        moveTrain(path);
+                }
         }
         public synchronized void receiveMessage(Message m){
-                System.out.println("Train: New Message");
+//                System.out.println("Train: New Message");
                 inbox.add(m);
                 notifyAll();
+                processMessage();
         }
         public synchronized void processMessage() {
                 while (inbox.isEmpty()) {
@@ -77,10 +86,13 @@ public class Train implements Runnable{
                         }
                 }
 
-                System.out.println("Train Processing a message");
+//                System.out.println("Train Processing a message");
 
-                try{//Is it a seek message?
-                        SeekMessage m = (SeekMessage)inbox.remove();
+                //Is it a seek message?
+                SeekMessage tempM = new SeekMessage();
+                if(inbox.peek().getClass().isInstance(tempM)) {
+//                        System.out.println("We have a seek message");
+                        SeekMessage m = (SeekMessage) inbox.remove();
                         notifyAll();
                         if (m.seekPath && !m.validPath) {//Just received a new destination station
                                 m.stationSent = null;
@@ -88,24 +100,26 @@ public class Train implements Runnable{
                                 rail.receiveMessage(m);
                         } else if (m.validPath && !m.seekPath) {//we have found a valid path to travel from A->B
                                 //Time to move
-                                moveTrain(m.path);
-                                if(m.travelingRight){
+                                if (m.travelingRight) {
                                         travelRight = true;
                                 }
                                 //Generate a moving message to a rail, there is a response, the rain moves
                                 System.out.println("Train: We have found a valid path and its time to move");
+                                moveTrain(m.path);
                         }
-                }catch(Exception e){//Then it must be a travel Message
-                        //System.out.println(inbox.peek().getClass());
-                        TravelMessage m = (TravelMessage)inbox.remove();
-                        if(m.validDestination){
-                                updateLocation(m.newRail, m.oldRail);
-                        }
-                        else{
+                }
+                else {
+//                        System.out.println("Train got a TravelMessage");
+                        TravelMessage m = (TravelMessage) inbox.remove();
+
+                        if (m.arrivedAtDestination) {
+                                updateLocation(m.newRail, m.oldRail,true);
+                        } else if (m.validDestination) {
+                                updateLocation(m.newRail, m.oldRail,false);
+                        } else {
                                 System.out.println("Its hopeless, and we are going to die out here");
                         }
                 }
-
         }
 
 
