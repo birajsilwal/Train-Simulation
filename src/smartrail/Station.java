@@ -20,6 +20,7 @@ public class Station extends Rail{
 //        inbox = new LinkedBlockingQueue<Message>();
         isSource = false;
         isDestination = false;
+        // method drawStation() - new method - option 2
     }
 
     public Point getLocation(){

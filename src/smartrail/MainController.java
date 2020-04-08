@@ -24,6 +24,7 @@ public class MainController extends Application {
     public void start(Stage primaryStage) throws Exception {
         Train train = new Train();
         FileLoader fl = new FileLoader(train);
+        //fl.readTrack - reading config here
         Station root = fl.getRailSystem();
         train.setStartRail(root);
         Rail thisStation = root;
@@ -31,7 +32,7 @@ public class MainController extends Application {
         Thread trainThread = new Thread(train);
         trainThread.start();
 
-        startThreads(root);
+//        startThreads(root);
 
         while(thisStation.right != null) {
             thisStation = thisStation.right;
@@ -40,7 +41,7 @@ public class MainController extends Application {
         s.selectedAsTarget();
         train.processMessage();
         Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();
-        //initGUI(primaryStage);
+        initGUI(primaryStage);
         //printRails(root);
     }
     private void startThreads(Rail root){

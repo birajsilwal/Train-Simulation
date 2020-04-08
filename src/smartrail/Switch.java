@@ -2,6 +2,7 @@ package smartrail;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+// thread
 public class Switch {
     private int name;
     private LinkedBlockingQueue<Message> inbox;
