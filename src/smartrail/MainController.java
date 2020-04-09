@@ -27,26 +27,27 @@ public class MainController extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-//        Train train = new Train();
-//        FileLoader fl = new FileLoader(train);
-//        fl.readInTrack(train);
-//        //fl.readTrack - reading config here
-//        Station root = fl.getRailSystem();
-//        train.setStartRail(root);
-//        Rail thisStation = root;
-//
-//        Thread trainThread = new Thread(train);
-//        trainThread.start();
-//
-////        startThreads(root);
-//
-//        while(thisStation.right != null) {
-//            thisStation = thisStation.right;
-//        }
-//        Station s = (Station)thisStation;
-//        s.selectedAsTarget();
-//        train.processMessage();
-//        Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();
+        Train train = new Train();
+        FileLoader fl = new FileLoader(train);
+        fl.readInTrack(train);
+        //fl.readTrack - reading config here
+        Station root = fl.getRailSystem();
+        train.setStartRail(root);
+        Rail thisStation = root;
+
+        Thread trainThread = new Thread(train);
+        trainThread.start();
+
+        startThreads(root);
+
+        while(thisStation.right != null) {
+            thisStation = thisStation.right;
+        }
+        Station s = (Station)thisStation;
+        s.selectedAsTarget();
+        train.processMessage();
+        Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();
+
         initGUI(primaryStage);
         //printRails(root);
     }
@@ -75,7 +76,7 @@ public class MainController extends Application {
     private void initGUI(Stage primaryStage) {
         pane = new Pane();
         mainPane = new AnchorPane();
-        fileLoader = new FileLoader(train);
+//        fileLoader = new FileLoader(train);
         display = new Display(pane, fileLoader);
 
         mainPane.getChildren().add(pane);
@@ -83,6 +84,7 @@ public class MainController extends Application {
         Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
         primaryStage.setTitle(" ");
         primaryStage.setScene(scene);
+        display.start();
         primaryStage.show();
 
     }
