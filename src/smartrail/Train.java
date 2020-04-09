@@ -16,10 +16,12 @@ public class Train implements Runnable{
         private Rail rail;
         protected LinkedBlockingQueue<Message> inbox;
         protected LinkedList<Rail> path;
+        protected boolean running;
 
         public Train() {
                 inbox = new LinkedBlockingQueue<>();
                 travelRight = false;
+                running = false;
         }
 
         public Train(Station s, Station d, Boolean ccd) {

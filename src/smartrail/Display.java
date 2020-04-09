@@ -19,7 +19,21 @@ public class Display extends AnimationTimer {
         this.pane = pane;
         this.fileLoader = fileLoader;
     }
-
+    public void recFinder(Rail root){
+        //If already visited, don't go there
+        Station tempStation = new Station(0,null,null);
+        Switch tempSwitch = new Switch(0,null,null);
+        if(root.getClass().isInstance(tempStation)) {
+            drawStation(root.startPoint.xcoor, root.startPoint.ycoor);
+        }
+//        }else if(root.getClass().isInstance(tempSwitch)){
+//            drawSwitch(root);
+//        }
+        if(root.right != null)recFinder(root.right);
+        if(root.left != null)recFinder(root.left);
+        if(root.rightSwitch != null)recFinder(root.rightSwitch);
+        if(root.leftSwitch != null)recFinder(root.leftSwitch);
+    }
     public Rectangle drawTrain() {
         Rectangle train1 = new Rectangle(70, 30);
         String imagePath = ("Image/trainLeft.png");

@@ -94,10 +94,7 @@ public class FileLoader {
                                         Integer.parseInt(arr[2])),train));
                         // draw here - option 1 - fileLoader would need reference to display
 
-                        display.drawStation(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
-
-
-
+                        //display.drawStation(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
 
                         stationNum++;
                         break;
