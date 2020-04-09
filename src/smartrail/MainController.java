@@ -18,7 +18,7 @@ import static smartrail.Constants.*;
 public class MainController extends Application {
     private Display display;
     private Pane pane;
-    private AnchorPane mainPane;
+//    private AnchorPane mainPane;
     private FileLoader fileLoader;
     private Train train = new Train();
 
@@ -52,8 +52,9 @@ public class MainController extends Application {
         Station s = (Station)thisStation;
         s.selectedAsTarget();
         train.processMessage();
+
+        initGUI(root, primaryStage);
         printThreads();
-        initGUI(primaryStage);
         //printRails(root);
     }
 
@@ -85,19 +86,20 @@ public class MainController extends Application {
 
 
     /* GUI starts from here */
-    private void initGUI(Stage primaryStage) {
-        pane = new Pane();
-        mainPane = new AnchorPane();
+    private void initGUI(Rail root, Stage primaryStage) {
+//        pane = new Pane();
+//        mainPane = new AnchorPane();
 //        fileLoader = new FileLoader(train);
-        display = new Display(pane, fileLoader);
-
-        mainPane.getChildren().add(pane);
-
-        Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
-        primaryStage.setTitle(" ");
-        primaryStage.setScene(scene);
-        display.start();
-        primaryStage.show();
+        display = new Display(root, primaryStage);
+        Thread guiThread = new Thread(display);
+        guiThread.start();
+//        mainPane.getChildren().add(pane);
+//
+//        Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
+//        primaryStage.setTitle(" ");
+//        primaryStage.setScene(scene);
+//        display.start();
+//        primaryStage.show();
 
     }
 }

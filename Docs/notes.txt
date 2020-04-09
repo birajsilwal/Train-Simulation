@@ -20,7 +20,25 @@ S0 _  _   _  _  _S3
        |W0
          W0
           W0
-S2_  _  _ W0 _  _ S1
+S2_  _  _ W0|_  _ S1
+
+Rail -> Switch
+Rail -> Station
+
+Rail - startpoint, endPoint - P(x,y)
+
+draw(){
+    is it a Station? drawStation
+    is it a Switch? drawSwitch
+    else it is a Rial: drawRail
+}
+
+drawStation(Station s){
+    s.startPoint.xcoor
+    if a rail is to the right{ draw station with coordinates to the right
+    else { draw station with coordinates to the left
+}
+
 -------------------------------------------------
 smartrail.Track
     - Inbox

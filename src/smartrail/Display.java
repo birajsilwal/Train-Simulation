@@ -2,22 +2,39 @@ package smartrail;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Display extends AnimationTimer {
+public class Display extends AnimationTimer implements Runnable {
 
     private FlowPane flowPane = new FlowPane();
-    private FileLoader fileLoader;
     private Pane pane;
+    private AnchorPane mainPane;
+    private Rail root;
+    private Stage primaryStage;
 
-    Display(Pane pane, FileLoader fileLoader) {
-        this.pane = pane;
-        this.fileLoader = fileLoader;
+    Display(Rail r, Stage pStage) {
+        primaryStage = pStage;
+        //this.pane = pane;
+        root = r;
+    }
+    private void render() {
+
+        while (inbox.isEmpty()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
     public void recFinder(Rail root){
         //If already visited, don't go there
@@ -48,6 +65,7 @@ public class Display extends AnimationTimer {
         Rectangle station = new Rectangle(60, 50);
         String imagePath = ("Image/station.png");
         Image image = new Image(imagePath);
+        //Test for right or left will be
         station.setX(xCor);
         station.setY(yCor);
         station.setFill(new ImagePattern(image));
@@ -80,6 +98,25 @@ public class Display extends AnimationTimer {
 
     @Override
     public void handle(long now) {
+
+    }
+
+    @Override
+    public void run() {
+        pane = new Pane();
+        mainPane = new AnchorPane();
+        mainPane.getChildren().add(pane);
+
+        Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
+        primaryStage.setTitle(" ");
+        primaryStage.setScene(scene);
+        display.start();
+        primaryStage.show();
+        boolean run = true;
+        while (Thread.currentThread().isAlive()) {
+            render();
+        }
+    }
 
     }
 }
