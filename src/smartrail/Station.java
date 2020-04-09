@@ -1,5 +1,10 @@
 package smartrail;
 
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Station extends Rail{
@@ -12,15 +17,21 @@ public class Station extends Rail{
     private Boolean isSource;
     private Boolean isDestination;
 
-    public Station(int n, Point p,Train t) {
-        super(n,p,t);
+    public Station(int n, Point point,Train t) {
+        super(n,point,t);
 //        name = n;
 //        left = null;
 //        right = null;
 //        inbox = new LinkedBlockingQueue<Message>();
         isSource = false;
         isDestination = false;
+
         // method drawStation() - new method - option 2
+        Rectangle rectangle = new Rectangle(80, 80);
+        rectangle.setFill(Color.BLACK);
+        rectangle.setX(point.xcoor);
+        rectangle.setY(point.ycoor);
+
     }
 
     public Point getLocation(){
