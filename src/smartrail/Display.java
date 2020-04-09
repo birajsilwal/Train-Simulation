@@ -38,7 +38,6 @@ public class Display extends AnimationTimer {
         station.setY(yCor);
         station.setFill(new ImagePattern(image));
         pane.getChildren().add(station);
-
     }
 
     /**@param rectangle is set as a train. This method moves rectangle from x to y*/

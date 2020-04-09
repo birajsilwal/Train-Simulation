@@ -92,9 +92,9 @@ public class FileLoader {
                         stations.add(new Station(stationNum,
                                 new Point(Integer.parseInt(arr[1]),
                                         Integer.parseInt(arr[2])),train));
-                        // draw here - option 1 - fileloader would need reference to display
+                        // draw here - option 1 - fileLoader would need reference to display
 
-                        display.drawStation(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
+//                        display.drawStation(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
 
 
 

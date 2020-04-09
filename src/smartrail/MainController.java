@@ -77,7 +77,6 @@ public class MainController extends Application {
         mainPane = new AnchorPane();
         fileLoader = new FileLoader(train);
         display = new Display(pane, fileLoader);
-        pane.setPadding(new Insets(20));
 
         mainPane.getChildren().add(pane);
 
