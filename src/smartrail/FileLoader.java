@@ -22,7 +22,7 @@ public class FileLoader {
         readInTrack(t);
         //make the track
         makeTrack();
-        display = new Display(pane, this);
+        //display = new Display(pane, this);
         //While loop---------------------
         //Make a move
 

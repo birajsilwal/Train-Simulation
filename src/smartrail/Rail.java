@@ -55,11 +55,11 @@ public class Rail implements Runnable{
             }
         }
 //        System.out.println(this + " processing message");
-        notifyAll();
+        //notifyAll();
         //Is it a seek message?
         SeekMessage tempM = new SeekMessage();
         if(inbox.peek().getClass().isInstance(tempM)) {
-//            System.out.println(this + " has a seek message");
+            System.out.println(this + " has a seek message");
 
             SeekMessage m = (SeekMessage) inbox.remove();
             //Who is it from

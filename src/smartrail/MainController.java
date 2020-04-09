@@ -35,7 +35,7 @@ public class MainController extends Application {
         Station root = fl.getRailSystem();
         train.setStartRail(root);
         Rail thisStation = root;
-
+        initGUI(root, primaryStage);
         Thread trainThread = new Thread(train);
         trainThread.start();
 
@@ -51,10 +51,10 @@ public class MainController extends Application {
         System.out.println(thisStation);
         Station s = (Station)thisStation;
         s.selectedAsTarget();
-        train.processMessage();
+        //train.processMessage();
 
-        initGUI(root, primaryStage);
-        printThreads();
+        //initGUI(root, primaryStage);
+        //printThreads();
         //printRails(root);
     }
 

@@ -25,32 +25,37 @@ public class Display extends AnimationTimer implements Runnable {
         //this.pane = pane;
         root = r;
     }
-    private void render() {
 
-        while (inbox.isEmpty()) {
+    private void render() {
+        boolean running = true;
+        while (running) {
             try {
-                wait();
+                wait();//informAll to wake me up
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            //Call the different render methods here to draw them
+            recFinder(root);
         }
 
     }
-    public void recFinder(Rail root){
+
+    public void recFinder(Rail root) {
         //If already visited, don't go there
-        Station tempStation = new Station(0,null,null);
-        Switch tempSwitch = new Switch(0,null,null);
-        if(root.getClass().isInstance(tempStation)) {
+        Station tempStation = new Station(0, null, null);
+        Switch tempSwitch = new Switch(0, null, null);
+        if (root.getClass().isInstance(tempStation)) {
             drawStation(root.startPoint.xcoor, root.startPoint.ycoor);
         }
 //        }else if(root.getClass().isInstance(tempSwitch)){
 //            drawSwitch(root);
 //        }
-        if(root.right != null)recFinder(root.right);
-        if(root.left != null)recFinder(root.left);
-        if(root.rightSwitch != null)recFinder(root.rightSwitch);
-        if(root.leftSwitch != null)recFinder(root.leftSwitch);
+        if (root.right != null) recFinder(root.right);
+        if (root.left != null) recFinder(root.left);
+        if (root.rightSwitch != null) recFinder(root.rightSwitch);
+        if (root.leftSwitch != null) recFinder(root.leftSwitch);
     }
+
     public Rectangle drawTrain() {
         Rectangle train1 = new Rectangle(70, 30);
         String imagePath = ("Image/trainLeft.png");
@@ -72,7 +77,9 @@ public class Display extends AnimationTimer implements Runnable {
         pane.getChildren().add(station);
     }
 
-    /**@param rectangle is set as a train. This method moves rectangle from x to y*/
+    /**
+     * @param rectangle is set as a train. This method moves rectangle from x to y
+     */
     public void moveTrain(Rectangle rectangle) {
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.seconds(11));
@@ -82,7 +89,9 @@ public class Display extends AnimationTimer implements Runnable {
         translateTransition.play();
     }
 
-    /**@return track. This method draws track */
+    /**
+     * @return track. This method draws track
+     */
     public Rectangle drawTrack() {
         Rectangle track = new Rectangle();
         for (int i = 0; i < 5; i++) {
@@ -110,13 +119,11 @@ public class Display extends AnimationTimer implements Runnable {
         Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
         primaryStage.setTitle(" ");
         primaryStage.setScene(scene);
-        display.start();
+        //display.start();
         primaryStage.show();
         boolean run = true;
         while (Thread.currentThread().isAlive()) {
             render();
         }
-    }
-
     }
 }

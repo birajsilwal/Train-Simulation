@@ -94,7 +94,7 @@ public class Train implements Runnable{
                                 e.printStackTrace();
                         }
                 }
-
+                notifyAll();
 //                System.out.println("Train Processing a message");
 
                 //Is it a seek message?
@@ -106,6 +106,7 @@ public class Train implements Runnable{
                         if (m.seekPath && !m.validPath) {//Just received a new destination station
                                 m.stationSent = null;
                                 System.out.println("Train: We have received a new target");
+                                //System.out.println("Trains current rail " +rail);
                                 rail.receiveMessage(m);
                         } else if (m.validPath && !m.seekPath) {//we have found a valid path to travel from A->B
                                 //Time to move
