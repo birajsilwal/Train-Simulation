@@ -1,5 +1,7 @@
 package smartrail;
 
+import javafx.scene.layout.Pane;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,12 +14,15 @@ public class FileLoader {
     private List<Station> stations;
     private List<Switch> switches;
     private Station rootStation;//We will have to increase this to an array later to deal with parallel tracks
+    private Display display;
+    private Pane pane;
 
     public FileLoader(Train t){
         //Read in the config file
         readInTrack(t);
         //make the track
         makeTrack();
+        display = new Display(pane, this);
         //While loop---------------------
         //Make a move
 
@@ -29,7 +34,7 @@ public class FileLoader {
     /*
     Reads in the file and makes LinkedLists for the tracks, stations, and switches
      */
-    private void readInTrack(Train train){
+    public void readInTrack(Train train){
         try {
             BufferedReader in = new BufferedReader(new FileReader("resources/simple.txt"));
             String line = null;
@@ -88,6 +93,12 @@ public class FileLoader {
                                 new Point(Integer.parseInt(arr[1]),
                                         Integer.parseInt(arr[2])),train));
                         // draw here - option 1 - fileloader would need reference to display
+
+                        display.drawStation(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
+
+
+
+
                         stationNum++;
                         break;
                     case"switch":
@@ -99,12 +110,13 @@ public class FileLoader {
                 }
             }
         }catch(FileNotFoundException e){
-            System.out.println("That is not a good file");
+            System.out.println("File not found exception in FileLoader.");
         }catch (Exception e1){
-            System.out.println("Something else went wrong");
+            System.out.println("Something else went wrong in FileLoader.");
         }
     }
-    private void makeTrack(){
+
+    public void makeTrack(){
         rootStation = null;
 //        for(LinkedList<Rail> rails : railSystem){
 //            for(Rail rail : rails) {
