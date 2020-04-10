@@ -35,22 +35,22 @@ public class MainController extends Application {
         Station root = fl.getRailSystem();
         train.setStartRail(root);
         Rail thisStation = root;
-        initGUI(root, primaryStage);
-//        Thread trainThread = new Thread(train);
-//        trainThread.start();
-//
-//        startThreads(root);
-//
-//        while(thisStation.right != null) {
-//            if(thisStation.rightSwitch != null){
-//                thisStation = thisStation.rightSwitch;
-//            }else{
-//                thisStation = thisStation.right;
-//            }
-//        }
-//        System.out.println(thisStation);
-//        Station s = (Station)thisStation;
-//        s.selectedAsTarget();
+        //initGUI(root, primaryStage);
+        Thread trainThread = new Thread(train);
+        trainThread.start();
+
+        startThreads(root);
+
+        while(thisStation.right != null) {
+            if(thisStation.rightSwitch != null){
+                thisStation = thisStation.rightSwitch;
+            }else{
+                thisStation = thisStation.right;
+            }
+        }
+        System.out.println(thisStation);
+        Station s = (Station)thisStation;
+        s.selectedAsTarget();
 
         //initGUI(root, primaryStage);
         //printThreads();
@@ -63,7 +63,9 @@ public class MainController extends Application {
         root.running = true;
         newThread.start();
         if(root.right != null && !root.right.running){ startThreads(root.right);}
+        if(root.rightSwitch != null && !root.rightSwitch.running){ startThreads(root.rightSwitch);}
         if(root.left != null && !root.left.running){ startThreads(root.left);}
+        if(root.leftSwitch != null && !root.leftSwitch.running){ startThreads(root.leftSwitch);}
 //        if(!root.rightSwitch.running){ startThreads(root.rightSwitch);
 //        if(!root.leftSwitch.running){ startThreads(root.leftSwitch);
 

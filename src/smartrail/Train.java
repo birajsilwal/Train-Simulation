@@ -17,11 +17,13 @@ public class Train implements Runnable{
         protected LinkedBlockingQueue<Message> inbox;
         protected LinkedList<Rail> path;
         protected boolean running;
+        protected int possiblePaths;
 
         public Train() {
                 inbox = new LinkedBlockingQueue<>();
                 travelRight = false;
                 running = false;
+                possiblePaths = 0;
         }
 
         public Train(Station s, Station d, Boolean ccd) {
@@ -99,6 +101,7 @@ public class Train implements Runnable{
 
                 //Is it a seek message?
                 SeekMessage tempM = new SeekMessage();
+                SplitMessage tempSplitM = new SplitMessage();
                 if(inbox.peek().getClass().isInstance(tempM)) {
 //                        System.out.println("We have a seek message");
                         SeekMessage m = (SeekMessage) inbox.remove();
@@ -106,6 +109,7 @@ public class Train implements Runnable{
                         if (m.seekPath && !m.validPath) {//Just received a new destination station
                                 m.stationSent = null;
                                 System.out.println("Train: We have received a new target");
+                                possiblePaths++;
                                 //System.out.println("Trains current rail " +rail);
                                 rail.receiveMessage(m);
                         } else if (m.validPath && !m.seekPath) {//we have found a valid path to travel from A->B
@@ -116,7 +120,16 @@ public class Train implements Runnable{
                                 //Generate a moving message to a rail, there is a response, the rain moves
                                 System.out.println("Train: We have found a valid path and its time to move");
                                 moveTrain(m.path);
+                        }else if(!m.validPath && !m.seekPath){//We have a dead end path
+                                possiblePaths--;
+                                if(possiblePaths == 0){
+                                        System.out.println("There are no valid paths to the Destination");
+                                }
                         }
+                }
+                else if(inbox.peek().getClass().isInstance(tempSplitM)){
+                        inbox.remove();
+                        possiblePaths++;
                 }
                 else {
 //                        System.out.println("Train got a TravelMessage");

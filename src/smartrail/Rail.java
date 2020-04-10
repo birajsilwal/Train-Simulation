@@ -76,6 +76,7 @@ public class Rail implements Runnable{
                     right.receiveMessage(m);
                     if (rightSwitch != null) {
                         rightSwitch.receiveMessage(m);
+                        sendSplitMessage();
                     }
                 } else {
                     m.addToPath(this);
@@ -83,6 +84,7 @@ public class Rail implements Runnable{
                     left.receiveMessage(m);
                     if (leftSwitch != null) {
                         leftSwitch.receiveMessage(m);
+                        sendSplitMessage();
                     }
                 }
             }
@@ -98,7 +100,10 @@ public class Rail implements Runnable{
             train.receiveMessage(m);
         }
     }
-
+    public void sendSplitMessage(){
+        SplitMessage m = new SplitMessage();
+        train.receiveMessage(m);
+    }
     @Override
     public String toString() {
         if (endPoint != null) {
@@ -112,7 +117,7 @@ public class Rail implements Runnable{
     public void run() {
 //        System.out.println(this + " is running");
         while (Thread.currentThread().isAlive()) {
-                        processMessage();
+                        this.processMessage();
                 }
     }
 

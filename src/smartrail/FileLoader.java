@@ -160,6 +160,7 @@ public class FileLoader {
                     }
                     else if(s.right == null && r.startPoint.xcoor == s.startPoint.xcoor+1 && r.startPoint.ycoor > s.startPoint.ycoor){
                         System.out.println("Endpoint " + r);
+                        s.endPoint = r.startPoint;
                         s.right = r;
                         r.leftSwitch = s;
                     }
