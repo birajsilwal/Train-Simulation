@@ -18,7 +18,7 @@ import static smartrail.Constants.*;
 public class MainController extends Application {
     private Display display;
     private Pane pane;
-//    private AnchorPane mainPane;
+    private AnchorPane mainPane;
     private FileLoader fileLoader;
     private Train train = new Train();
 
@@ -29,17 +29,22 @@ public class MainController extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Train train = new Train();
-        FileLoader fl = new FileLoader(train);
-        fl.readInTrack(train);
-        //fl.readTrack - reading config here
-        Station root = fl.getRailSystem();
-        train.setStartRail(root);
-        Rail thisStation = root;
-        //initGUI(root, primaryStage);
+        FileLoader fileLoader = new FileLoader(train);
+        fileLoader.readInTrack(train);
+        //fileLoader.readTrack - reading config here
+
+
+        Station station = fileLoader.getRailSystem();
+
+
+        train.setStartRail(station);
+        Rail thisStation = station;
+        initGUI(station, primaryStage);
+
         Thread trainThread = new Thread(train);
         trainThread.start();
 
-        startThreads(root);
+        startThreads(station);
 
         while(thisStation.right != null) {
             if(thisStation.rightSwitch != null){
@@ -51,10 +56,10 @@ public class MainController extends Application {
         System.out.println(thisStation);
         Station s = (Station)thisStation;
         s.selectedAsTarget();
+//        train.processMessage();
 
-        //initGUI(root, primaryStage);
         //printThreads();
-        //printRails(root);
+        //printRails(station);
     }
 
 
@@ -88,19 +93,19 @@ public class MainController extends Application {
 
     /* GUI starts from here */
     private void initGUI(Rail root, Stage primaryStage) {
-//        pane = new Pane();
-//        mainPane = new AnchorPane();
-//        fileLoader = new FileLoader(train);
+        pane = new Pane();
+        mainPane = new AnchorPane();
+        fileLoader = new FileLoader(train);
         display = new Display(root, primaryStage);
         //Thread guiThread = new Thread(display);
         //guiThread.start();
-//        mainPane.getChildren().add(pane);
-//
-//        Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
-//        primaryStage.setTitle(" ");
-//        primaryStage.setScene(scene);
-//        display.start();
-//        primaryStage.show();
+        mainPane.getChildren().add(pane);
+
+        Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
+        primaryStage.setTitle(" ");
+        primaryStage.setScene(scene);
+        display.start();
+        primaryStage.show();
 
     }
 }

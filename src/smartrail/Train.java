@@ -50,7 +50,7 @@ public class Train implements Runnable{
                 }else{
 //                        System.out.println("We want to move left");
                         TravelMessage m = new TravelMessage(rail.left, rail);
-                        rail.left.receiveMessage(m);
+//                        rail.left.receiveMessage(m);
                 }
                 // otherwise return false
                 // need positional data i.e. x y

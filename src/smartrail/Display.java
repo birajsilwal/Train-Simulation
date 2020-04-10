@@ -38,7 +38,6 @@ public class Display extends AnimationTimer{
             //Call the different render methods here to draw them
             recFinder(root);
         }
-
     }
 
     public void recFinder(Rail root) {
@@ -111,20 +110,19 @@ public class Display extends AnimationTimer{
 
     }
 
-
     public void run() {
-        pane = new Pane();
-        mainPane = new AnchorPane();
-        mainPane.getChildren().add(pane);
-
-        Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
-        primaryStage.setTitle(" ");
-        primaryStage.setScene(scene);
-        //display.start();
-        primaryStage.show();
+//        pane = new Pane();
+//        mainPane = new AnchorPane();
+//        mainPane.getChildren().add(pane);
+//
+//        Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
+//        primaryStage.setTitle(" ");
+//        primaryStage.setScene(scene);
+//        this.start();
+//        primaryStage.show();
         boolean run = true;
         while (Thread.currentThread().isAlive()) {
-            render();
+//            render();
         }
     }
 }
