@@ -97,10 +97,8 @@ public class MainController extends Application {
         mainPane = new AnchorPane();
         fileLoader = new FileLoader(train);
         display = new Display(root, primaryStage);
-        //Thread guiThread = new Thread(display);
-        //guiThread.start();
-        mainPane.getChildren().add(pane);
 
+        mainPane.getChildren().add(pane);
         Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
         primaryStage.setTitle(" ");
         primaryStage.setScene(scene);

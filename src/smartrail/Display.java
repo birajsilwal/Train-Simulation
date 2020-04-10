@@ -12,7 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Display extends AnimationTimer{
+public class Display extends AnimationTimer {
 
     private FlowPane flowPane = new FlowPane();
     private Pane pane;
@@ -24,20 +24,6 @@ public class Display extends AnimationTimer{
         primaryStage = pStage;
         //this.pane = pane;
         root = r;
-        run();
-    }
-
-    private void render() {
-        boolean running = true;
-        while (running) {
-            try {
-                wait();//informAll to wake me up
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            //Call the different render methods here to draw them
-            recFinder(root);
-        }
     }
 
     public void recFinder(Rail root) {
@@ -110,19 +96,4 @@ public class Display extends AnimationTimer{
 
     }
 
-    public void run() {
-//        pane = new Pane();
-//        mainPane = new AnchorPane();
-//        mainPane.getChildren().add(pane);
-//
-//        Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
-//        primaryStage.setTitle(" ");
-//        primaryStage.setScene(scene);
-//        this.start();
-//        primaryStage.show();
-        boolean run = true;
-        while (Thread.currentThread().isAlive()) {
-//            render();
-        }
-    }
 }
