@@ -36,22 +36,21 @@ public class MainController extends Application {
         train.setStartRail(root);
         Rail thisStation = root;
         initGUI(root, primaryStage);
-        Thread trainThread = new Thread(train);
-        trainThread.start();
-
-        startThreads(root);
-
-        while(thisStation.right != null) {
-            if(thisStation.rightSwitch != null){
-                thisStation = thisStation.rightSwitch;
-            }else{
-                thisStation = thisStation.right;
-            }
-        }
-        System.out.println(thisStation);
-        Station s = (Station)thisStation;
-        s.selectedAsTarget();
-        //train.processMessage();
+//        Thread trainThread = new Thread(train);
+//        trainThread.start();
+//
+//        startThreads(root);
+//
+//        while(thisStation.right != null) {
+//            if(thisStation.rightSwitch != null){
+//                thisStation = thisStation.rightSwitch;
+//            }else{
+//                thisStation = thisStation.right;
+//            }
+//        }
+//        System.out.println(thisStation);
+//        Station s = (Station)thisStation;
+//        s.selectedAsTarget();
 
         //initGUI(root, primaryStage);
         //printThreads();
@@ -91,8 +90,8 @@ public class MainController extends Application {
 //        mainPane = new AnchorPane();
 //        fileLoader = new FileLoader(train);
         display = new Display(root, primaryStage);
-        Thread guiThread = new Thread(display);
-        guiThread.start();
+        //Thread guiThread = new Thread(display);
+        //guiThread.start();
 //        mainPane.getChildren().add(pane);
 //
 //        Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);

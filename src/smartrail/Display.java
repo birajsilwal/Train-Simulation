@@ -12,7 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Display extends AnimationTimer implements Runnable {
+public class Display extends AnimationTimer{
 
     private FlowPane flowPane = new FlowPane();
     private Pane pane;
@@ -24,6 +24,7 @@ public class Display extends AnimationTimer implements Runnable {
         primaryStage = pStage;
         //this.pane = pane;
         root = r;
+        run();
     }
 
     private void render() {
@@ -110,7 +111,7 @@ public class Display extends AnimationTimer implements Runnable {
 
     }
 
-    @Override
+
     public void run() {
         pane = new Pane();
         mainPane = new AnchorPane();
