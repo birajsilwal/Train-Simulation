@@ -104,11 +104,11 @@ public class MainController extends Application {
         fileLoader = new FileLoader(train);
 
         borderPane.setCenter(pane);
-        borderPane.setPadding(new Insets(50, 50, 0,50));
+//        borderPane.setPadding(new Insets(50, 50, 0,50));
         Scene scene = new Scene(borderPane, widthOfMainPane, heightOfMainPane);
         primaryStage.setTitle(" ");
         primaryStage.setScene(scene);
-        display = new Display(pane, root, fileLoader.getStation());
+        display = new Display(pane, root, fileLoader.getStation(), fileLoader.getSwitches());
         display.start();
         primaryStage.show();
 

@@ -36,7 +36,7 @@ public class FileLoader {
      */
     public void readInTrack(Train train){
         try {
-            BufferedReader in = new BufferedReader(new FileReader("resources/simple_switch.txt"));
+            BufferedReader in = new BufferedReader(new FileReader("resources/test.txt"));
             String line = null;
             railSystem = new LinkedList<>();
             stations = new LinkedList<>();
@@ -158,22 +158,22 @@ public class FileLoader {
         }
 
 //        initGUI(railSystem, stations, switches);
-//        getStations1(stations);
+        getSwitches1(switches);
 
     }
 
-//    public void getStations1(List<Station> stationList) {
-//        System.out.println("This is the size of the stations: " + stations.size());
-//        System.out.println("This is station ll: " + stationList);
-//        for (Station station : stationList) {
-//            System.out.println("This is station " + station.name + ".");
-//            System.out.println("This is xCor: " + station.getLocation().xcoor);
-//            System.out.println("This is yCor: " + station.getLocation().ycoor);
-//        }
-//    }
+    public void getSwitches1(List<Switch> switchesList) {
+        System.out.println("This is the size of the switches: " + stations.size());
+        System.out.println("This is switches ll: " + switchesList);
+
+    }
 
     public List<Station> getStation() {
         return stations;
+    }
+
+    public List<Switch> getSwitches() {
+        return switches;
     }
 
     protected Station getRailSystem(){

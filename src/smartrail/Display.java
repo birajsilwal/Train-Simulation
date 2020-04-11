@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -21,10 +22,11 @@ public class Display extends AnimationTimer {
     private AnchorPane mainPane;
     private Rail rail;
 
-    Display(Pane pane, Rail r, List<Station> stations) {
+    Display(Pane pane, Rail r, List<Station> stations, List<Switch> switches) {
         this.pane = pane;
         rail = r;
         drawStation(stations);
+        drawSwitches(switches);
 
     }
 
@@ -68,6 +70,20 @@ public class Display extends AnimationTimer {
         rectangle.setTranslateX(station.startPoint.xcoor * 100);
         rectangle.setTranslateY(station.startPoint.ycoor * 50);
         return rectangle;
+    }
+
+    public void drawSwitches(List<Switch> switches) {
+        for(Switch sw : switches) {
+            pane.getChildren().add(setSwitch(sw));
+        }
+    }
+
+    public Circle setSwitch(Switch sw) {
+        Circle circle = new Circle(10);
+        circle.setFill(Color.BLACK);
+        circle.setTranslateX(sw.startPoint.xcoor * 100);
+        circle.setTranslateY(sw.startPoint.ycoor * 50);
+        return circle;
     }
 
     /**
