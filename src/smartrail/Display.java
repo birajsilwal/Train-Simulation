@@ -28,9 +28,9 @@ public class Display extends AnimationTimer {
 
     public void recFinder(Rail root) {
         //If already visited, don't go there
-        Station tempStation = new Station(0, null, null);
-        Switch tempSwitch = new Switch(0, null, null);
-        if (root.getClass().isInstance(tempStation)) {
+//        Station tempStation = new Station(0, null, null);
+//        Switch tempSwitch = new Switch(0, null, null);
+        if (root instanceof Station) {
             drawStation(root.startPoint.xcoor, root.startPoint.ycoor);
         }
 //        }else if(root.getClass().isInstance(tempSwitch)){

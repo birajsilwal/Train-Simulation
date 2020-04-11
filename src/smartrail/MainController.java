@@ -56,8 +56,8 @@ public class MainController extends Application {
         System.out.println(thisStation);
         Station s = (Station)thisStation;
         s.selectedAsTarget();
-//        train.processMessage();
 
+        //initGUI(root, primaryStage);
         //printThreads();
         //printRails(station);
     }
