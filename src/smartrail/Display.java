@@ -2,45 +2,46 @@ package smartrail;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.List;
 
 public class Display extends AnimationTimer {
 
     private FlowPane flowPane = new FlowPane();
     private Pane pane;
     private AnchorPane mainPane;
-    private Rail root;
-    private Stage primaryStage;
+    private Rail rail;
 
-    Display(Rail r, Stage pStage) {
-        primaryStage = pStage;
-        //this.pane = pane;
-        root = r;
+    Display(Pane pane, Rail r, List<Station> stations) {
+        this.pane = pane;
+        rail = r;
+        drawStation(stations);
+
     }
 
-    public void recFinder(Rail root) {
-        //If already visited, don't go there
-//        Station tempStation = new Station(0, null, null);
-//        Switch tempSwitch = new Switch(0, null, null);
-        if (root instanceof Station) {
-            drawStation(root.startPoint.xcoor, root.startPoint.ycoor);
-        }
-//        }else if(root.getClass().isInstance(tempSwitch)){
-//            drawSwitch(root);
+//    public void recFinder(Rail railManager) {
+//
+//        //If already visited, don't go there
+//        if (railManager instanceof Station) {
+//            drawStation(railManager.startPoint);
 //        }
-        if (root.right != null) recFinder(root.right);
-        if (root.left != null) recFinder(root.left);
-        if (root.rightSwitch != null) recFinder(root.rightSwitch);
-        if (root.leftSwitch != null) recFinder(root.leftSwitch);
-    }
+////        }else if(railManager.getClass().isInstance(tempSwitch)){
+////            drawSwitch(railManager);
+////        }
+//        if (railManager.right != null) recFinder(railManager.right);
+//        if (railManager.left != null) recFinder(railManager.left);
+//        if (railManager.rightSwitch != null) recFinder(railManager.rightSwitch);
+//        if (railManager.leftSwitch != null) recFinder(railManager.leftSwitch);
+//    }
 
     public Rectangle drawTrain() {
         Rectangle train1 = new Rectangle(70, 30);
@@ -52,15 +53,21 @@ public class Display extends AnimationTimer {
 
     /* later on we need to make config file so that we do not
      have to create every track and stations manually.*/
-    public void drawStation(int xCor, int yCor) {
-        Rectangle station = new Rectangle(60, 50);
+    public void drawStation(List<Station> stations) {
+        for (Station station : stations) {
+            pane.getChildren().add(setStation(station));
+        }
+    }
+
+
+    public Rectangle setStation(Station station) {
         String imagePath = ("Image/station.png");
         Image image = new Image(imagePath);
-        //Test for right or left will be
-        station.setX(xCor);
-        station.setY(yCor);
-        station.setFill(new ImagePattern(image));
-        pane.getChildren().add(station);
+        Rectangle rectangle = new Rectangle(60, 60);
+        rectangle.setFill(new ImagePattern(image));
+        rectangle.setTranslateX(station.startPoint.xcoor * 100);
+        rectangle.setTranslateY(station.startPoint.ycoor * 50);
+        return rectangle;
     }
 
     /**
@@ -93,7 +100,7 @@ public class Display extends AnimationTimer {
 
     @Override
     public void handle(long now) {
-
+//        drawStation();
     }
 
 }

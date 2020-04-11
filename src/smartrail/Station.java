@@ -1,12 +1,5 @@
 package smartrail;
 
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
-
-import java.util.concurrent.LinkedBlockingQueue;
-
 public class Station extends Rail{
 
 //    private int name;
@@ -27,42 +20,44 @@ public class Station extends Rail{
         isDestination = false;
 
         // method drawStation() - new method - option 2
-        Rectangle rectangle = new Rectangle(80, 80);
-        rectangle.setFill(Color.BLACK);
-        rectangle.setX(point.xcoor);
-        rectangle.setY(point.ycoor);
+//        Rectangle rectangle = new Rectangle(80, 80);
+//        rectangle.setFill(Color.BLACK);
+//        rectangle.setX(point.xcoor);
+//        rectangle.setY(point.ycoor);
 
     }
 
     public Point getLocation(){
         return startPoint;
     }
+
     public void setLeft(Rail rail){
         left = rail;
     }
+
     public void setRight(Rail rail){
         right = rail;
     }
 
     private Message createMessage(){
-        SeekMessage m = new SeekMessage();
-        m.setStationSent(this);
-        m.stationTarget= this;
-        m.seekPath = true;
-        m.validPath = false;
-        return m;
+        SeekMessage seekMessage = new SeekMessage();
+        seekMessage.setStationSent(this);
+        seekMessage.stationTarget= this;
+        seekMessage.seekPath = true;
+        seekMessage.validPath = false;
+        return seekMessage;
     }
     public synchronized void selectedAsTarget(){
         //When selected, create a message and send it to the train
-        Message m = createMessage();
-        train.receiveMessage(m);
+        Message message = createMessage();
+        train.receiveMessage(message);
         System.out.println("Exit selectAsTarget");
     }
 
     @Override
-    public synchronized void receiveMessage(Message m){
+    public synchronized void receiveMessage(Message message){
 //        System.out.println(this + " received message");
-        inbox.add(m);
+        inbox.add(message);
         notifyAll();
 //        processMessage();
     }

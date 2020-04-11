@@ -121,9 +121,4 @@ public class Rail implements Runnable{
                 }
     }
 
-    // define position of the track x and y and pass to the train
-
-    // able to send the message
-
-
 }

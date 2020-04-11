@@ -17,9 +17,9 @@ public class FileLoader {
     private Display display;
     private Pane pane;
 
-    public FileLoader(Train t){
+    public FileLoader(Train train){
         //Read in the config file
-        readInTrack(t);
+        readInTrack(train);
         //make the track
         makeTrack();
         //display = new Display(pane, this);
@@ -92,9 +92,7 @@ public class FileLoader {
                         stations.add(new Station(stationNum,
                                 new Point(Integer.parseInt(arr[1]),
                                         Integer.parseInt(arr[2])),train));
-                        // draw here - option 1 - fileLoader would need reference to display
 
-//                        display.drawStation(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
 
                         stationNum++;
                         break;
@@ -115,58 +113,67 @@ public class FileLoader {
 
     public void makeTrack(){
         rootStation = null;
-//        for(LinkedList<Rail> rails : railSystem){
-//            for(Rail rail : rails) {
-//                System.out.println(rail);
-//            }
-//        }
-//        for(Station s : stations){
-//            System.out.println("Station: " + s);
-//        }
-        //Look through the Stations and see if any of the tracks will match up
 
         //Make the stations connect where the coordinates match
-        for(Station s : stations){
+        for(Station station : stations){
             for(LinkedList<Rail> rails : railSystem){
-                if(rails.get(0).getStartPoint().xcoor == s.getLocation().xcoor &&
-                        rails.get(0).getStartPoint().ycoor == s.getLocation().ycoor){
+                if(rails.get(0).getStartPoint().xcoor == station.getLocation().xcoor &&
+                        rails.get(0).getStartPoint().ycoor == station.getLocation().ycoor){
                     if(rootStation == null){
-                        rootStation = s;
+                        rootStation = station;
                     }
-                    s.setRight(rails.get(0));
-                    rails.get(0).setLeft(s);
+                    station.setRight(rails.get(0));
+                    rails.get(0).setLeft(station);
                 }
             }
         }
         //Connect the stations that are 1 away to the right of the track
-        for(Station s : stations){
+        for(Station station : stations){
             for(LinkedList<Rail> rails : railSystem){
-                if(rails.getLast().getStartPoint().xcoor == s.getLocation().xcoor-1 &&
-                        rails.getLast().getStartPoint().ycoor == s.getLocation().ycoor){
-                    s.setLeft(rails.getLast());
-                    rails.getLast().setEndPoint(s.getLocation());
-                    rails.getLast().setRight(s);
+                if(rails.getLast().getStartPoint().xcoor == station.getLocation().xcoor-1 &&
+                        rails.getLast().getStartPoint().ycoor == station.getLocation().ycoor){
+                    station.setLeft(rails.getLast());
+                    rails.getLast().setEndPoint(station.getLocation());
+                    rails.getLast().setRight(station);
                 }
             }
         }
         //Set the switches
         for(LinkedList<Rail> rails : railSystem){
-            for(Rail r:rails) {
+            for(Rail rail:rails) {
                 for (Switch s : switches) {
-                    if (r.startPoint.xcoor == s.startPoint.xcoor && r.startPoint.ycoor == s.startPoint.ycoor){
-                        System.out.println("Startpoint " + r.startPoint);
-                        r.rightSwitch = s;
-                        s.left = r;
+                    if (rail.startPoint.xcoor == s.startPoint.xcoor && rail.startPoint.ycoor == s.startPoint.ycoor){
+                        System.out.println("Startpoint " + rail.startPoint);
+                        rail.rightSwitch = s;
+                        s.left = rail;
                     }
-                    else if(s.right == null && r.startPoint.xcoor == s.startPoint.xcoor+1 && r.startPoint.ycoor > s.startPoint.ycoor){
-                        System.out.println("Endpoint " + r);
-                        s.endPoint = r.startPoint;
-                        s.right = r;
-                        r.leftSwitch = s;
+                    else if(s.right == null && rail.startPoint.xcoor == s.startPoint.xcoor+1 && rail.startPoint.ycoor > s.startPoint.ycoor){
+                        System.out.println("Endpoint " + rail);
+                        s.endPoint = rail.startPoint;
+                        s.right = rail;
+                        rail.leftSwitch = s;
                     }
                 }
             }
         }
+
+//        initGUI(railSystem, stations, switches);
+//        getStations1(stations);
+
+    }
+
+//    public void getStations1(List<Station> stationList) {
+//        System.out.println("This is the size of the stations: " + stations.size());
+//        System.out.println("This is station ll: " + stationList);
+//        for (Station station : stationList) {
+//            System.out.println("This is station " + station.name + ".");
+//            System.out.println("This is xCor: " + station.getLocation().xcoor);
+//            System.out.println("This is yCor: " + station.getLocation().ycoor);
+//        }
+//    }
+
+    public List<Station> getStation() {
+        return stations;
     }
 
     protected Station getRailSystem(){

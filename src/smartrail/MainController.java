@@ -2,9 +2,11 @@ package smartrail;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -18,6 +20,8 @@ import static smartrail.Constants.*;
 public class MainController extends Application {
     private Display display;
     private Pane pane;
+    private BorderPane borderPane;
+    private Group group;
     private AnchorPane mainPane;
     private FileLoader fileLoader;
     private Train train = new Train();
@@ -94,14 +98,17 @@ public class MainController extends Application {
     /* GUI starts from here */
     private void initGUI(Rail root, Stage primaryStage) {
         pane = new Pane();
+        borderPane = new BorderPane();
         mainPane = new AnchorPane();
+        group = new Group();
         fileLoader = new FileLoader(train);
-        display = new Display(root, primaryStage);
 
-        mainPane.getChildren().add(pane);
-        Scene scene = new Scene(mainPane, Constants.widthOfMainPane, Constants.heightOfMainPane);
+        borderPane.setCenter(pane);
+        borderPane.setPadding(new Insets(50, 50, 0,50));
+        Scene scene = new Scene(borderPane, widthOfMainPane, heightOfMainPane);
         primaryStage.setTitle(" ");
         primaryStage.setScene(scene);
+        display = new Display(pane, root, fileLoader.getStation());
         display.start();
         primaryStage.show();
 
