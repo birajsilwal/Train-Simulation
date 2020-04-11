@@ -33,7 +33,7 @@ public class MainController extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Train train = new Train();
-        FileLoader fileLoader = new FileLoader(train);
+        fileLoader = new FileLoader(train);
         fileLoader.readInTrack(train);
         //fileLoader.readTrack - reading config here
 
@@ -58,8 +58,8 @@ public class MainController extends Application {
             }
         }
         System.out.println(thisStation);
-        Station s = (Station)thisStation;
-        s.selectedAsTarget();
+//        Station s = (Station)thisStation;
+//        s.selectedAsTarget();
 
         //initGUI(root, primaryStage);
         //printThreads();
@@ -101,7 +101,7 @@ public class MainController extends Application {
         borderPane = new BorderPane();
         mainPane = new AnchorPane();
         group = new Group();
-        fileLoader = new FileLoader(train);
+//        fileLoader = new FileLoader(train);
 
         borderPane.setCenter(pane);
 //        borderPane.setPadding(new Insets(50, 50, 0,50));

@@ -57,7 +57,7 @@ public class Display extends AnimationTimer {
      have to create every track and stations manually.*/
     public void drawStation(List<Station> stations) {
         for (Station station : stations) {
-            pane.getChildren().add(setStation(station));
+            pane.getChildren().addAll(setStation(station));
         }
     }
 
@@ -66,23 +66,25 @@ public class Display extends AnimationTimer {
         String imagePath = ("Image/station.png");
         Image image = new Image(imagePath);
         Rectangle rectangle = new Rectangle(60, 60);
-        rectangle.setFill(new ImagePattern(image));
-        rectangle.setTranslateX(station.startPoint.xcoor * 100);
-        rectangle.setTranslateY(station.startPoint.ycoor * 50);
+//        rectangle.setFill(new ImagePattern(image));
+        rectangle.setFill(Color.TURQUOISE);
+        rectangle.setTranslateX(station.startPoint.xcoor * 70);
+        rectangle.setTranslateY((station.startPoint.ycoor + 1) * 70);
         return rectangle;
     }
 
     public void drawSwitches(List<Switch> switches) {
         for(Switch sw : switches) {
-            pane.getChildren().add(setSwitch(sw));
+
+            pane.getChildren().addAll(setSwitch(sw));
         }
     }
 
     public Circle setSwitch(Switch sw) {
-        Circle circle = new Circle(10);
+        Circle circle = new Circle(15);
         circle.setFill(Color.BLACK);
-        circle.setTranslateX(sw.startPoint.xcoor * 100);
-        circle.setTranslateY(sw.startPoint.ycoor * 50);
+        circle.setTranslateX(sw.startPoint.xcoor * 70);
+        circle.setTranslateY((sw.startPoint.ycoor + 1)  * 80);
         return circle;
     }
 

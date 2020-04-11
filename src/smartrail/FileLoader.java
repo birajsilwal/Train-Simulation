@@ -52,6 +52,7 @@ public class FileLoader {
                     str = str.replaceAll("\\s+", "");
                 }
                 switch (arr[0]){
+
                     case "track":
                         //Holds a line of rails to be converted into Rails
                         LinkedList<smartrail.Point> rail = new LinkedList<>();
@@ -88,6 +89,7 @@ public class FileLoader {
                         }
                         railSystem.add(railTemp);
                         break;
+
                     case"station":
                         stations.add(new Station(stationNum,
                                 new Point(Integer.parseInt(arr[1]),
@@ -96,6 +98,7 @@ public class FileLoader {
 
                         stationNum++;
                         break;
+
                     case"switch":
                         switches.add(new Switch(switchNum,
                                 new Point(Integer.parseInt(arr[1]),

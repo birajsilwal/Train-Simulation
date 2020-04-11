@@ -7,5 +7,6 @@ station 10 2
 track 0 0 10 0 10
 track 0 1 10 1 10
 track 0 2 10 2 10
-switch 3 0
+switch 4 0
 switch 5 1
+switch 3 2
