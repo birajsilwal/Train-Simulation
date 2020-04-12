@@ -12,7 +12,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import sun.awt.image.ImageWatched;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Display extends AnimationTimer {
@@ -21,12 +23,14 @@ public class Display extends AnimationTimer {
     private Pane pane;
     private AnchorPane mainPane;
     private Rail rail;
+    private LinkedList<Station> selectedStations;
 
     Display(Pane pane, Rail r, List<Station> stations, List<Switch> switches) {
         this.pane = pane;
         rail = r;
         drawStation(stations);
         drawSwitches(switches);
+        selectedStations = new LinkedList<>();
 
     }
 
@@ -70,18 +74,29 @@ public class Display extends AnimationTimer {
         rectangle.setFill(Color.TURQUOISE);
         rectangle.setTranslateX(station.startPoint.xcoor * 70);
         rectangle.setTranslateY((station.startPoint.ycoor + 1) * 70);
+
+        rectangle.setOnMouseClicked(event -> {
+            selectedStations.add(station);
+            System.out.println("selected stations: " + selectedStations);
+            if (selectedStations.size() == 2) {
+                setSourceDestination(selectedStations);
+                selectedStations.clear();
+            }
+
+            rectangle.setFill(Color.BLACK);
+        });
+
         return rectangle;
     }
 
     public void drawSwitches(List<Switch> switches) {
         for(Switch sw : switches) {
-
             pane.getChildren().addAll(setSwitch(sw));
         }
     }
 
     public Circle setSwitch(Switch sw) {
-        Circle circle = new Circle(15);
+        Circle circle = new Circle(10);
         circle.setFill(Color.BLACK);
         circle.setTranslateX(sw.startPoint.xcoor * 70);
         circle.setTranslateY((sw.startPoint.ycoor + 1)  * 80);
@@ -89,15 +104,28 @@ public class Display extends AnimationTimer {
     }
 
     /**
-     * @param rectangle is set as a train. This method moves rectangle from x to y
+     * @param selectedStations is set as a train. This method moves rectangle from x to y
      */
-    public void moveTrain(Rectangle rectangle) {
+    public synchronized void setSourceDestination(LinkedList<Station> selectedStations) {
+
+        Station source = selectedStations.getFirst();
+        Station destination = selectedStations.getLast();
+
+        Rectangle train = new Rectangle(60, 30);
+
         TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setDuration(Duration.seconds(11));
-        translateTransition.setToX(500);
-        translateTransition.setToY(3);
-        translateTransition.setNode(rectangle);
+        translateTransition.setDuration(Duration.seconds(10));
+        translateTransition.setFromX(source.startPoint.xcoor);
+        System.out.println("From: " + source.startPoint.xcoor );
+        translateTransition.setFromY(source.startPoint.ycoor);
+        translateTransition.setToX(destination.startPoint.xcoor * 70);
+        System.out.println("To: " + destination.startPoint.xcoor );
+        translateTransition.setToY(destination.startPoint.ycoor);
+        pane.getChildren().add(train);
+        translateTransition.setNode(train);
         translateTransition.play();
+        start();
+        System.out.println("debug");
     }
 
     /**
@@ -119,6 +147,7 @@ public class Display extends AnimationTimer {
     @Override
     public void handle(long now) {
 //        drawStation();
+
     }
 
 }

@@ -101,7 +101,6 @@ public class MainController extends Application {
         borderPane = new BorderPane();
         mainPane = new AnchorPane();
         group = new Group();
-//        fileLoader = new FileLoader(train);
 
         borderPane.setCenter(pane);
 //        borderPane.setPadding(new Insets(50, 50, 0,50));
