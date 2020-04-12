@@ -70,8 +70,7 @@ public class Display extends AnimationTimer {
         String imagePath = ("Image/station.png");
         Image image = new Image(imagePath);
         Rectangle rectangle = new Rectangle(60, 60);
-//        rectangle.setFill(new ImagePattern(image));
-        rectangle.setFill(Color.TURQUOISE);
+        rectangle.setFill(new ImagePattern(image));
         rectangle.setTranslateX(station.startPoint.xcoor * 70);
         rectangle.setTranslateY((station.startPoint.ycoor + 1) * 70);
 
@@ -82,8 +81,8 @@ public class Display extends AnimationTimer {
                 setSourceDestination(selectedStations);
                 selectedStations.clear();
             }
-
-            rectangle.setFill(Color.BLACK);
+            rectangle.setStroke(Color.DARKGREEN);
+            rectangle.setStrokeWidth(5);
         });
 
         return rectangle;
@@ -111,7 +110,11 @@ public class Display extends AnimationTimer {
         Station source = selectedStations.getFirst();
         Station destination = selectedStations.getLast();
 
+        String imagePath = ("Image/trainLeft.png");
+        Image image = new Image(imagePath);
         Rectangle train = new Rectangle(60, 30);
+        train.setFill(new ImagePattern(image));
+
 
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.seconds(10));
