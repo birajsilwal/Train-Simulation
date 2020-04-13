@@ -110,25 +110,31 @@ public class Display extends AnimationTimer {
         Station source = selectedStations.getFirst();
         Station destination = selectedStations.getLast();
 
+        int startX = (source.startPoint.xcoor + 1) * 70;
+        int startY = (source.startPoint.ycoor + 1) * 70;
+
+        int endX = (destination.startPoint.xcoor - 1) * 70;
+        int endY = (destination.startPoint.ycoor);
+
         String imagePath = ("Image/trainLeft.png");
         Image image = new Image(imagePath);
         Rectangle train = new Rectangle(60, 30);
         train.setFill(new ImagePattern(image));
 
+        train.setLayoutX(startX);
+        train.setLayoutY(startY);
 
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.seconds(10));
-        translateTransition.setFromX(source.startPoint.xcoor);
-        System.out.println("From: " + source.startPoint.xcoor );
-        translateTransition.setFromY(source.startPoint.ycoor);
-        translateTransition.setToX(destination.startPoint.xcoor * 70);
-        System.out.println("To: " + destination.startPoint.xcoor );
-        translateTransition.setToY(destination.startPoint.ycoor);
-        pane.getChildren().add(train);
+
+        translateTransition.setToX(endX);
+        translateTransition.setToY(endY);
+        System.out.println("To: " + endX + " " + endY);
+
+        pane.getChildren().addAll(train);
         translateTransition.setNode(train);
         translateTransition.play();
         start();
-        System.out.println("debug");
     }
 
     /**
