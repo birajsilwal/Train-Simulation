@@ -82,7 +82,7 @@ public class Switch extends Rail{
 
     @Override
     public String toString(){
-        return name + " " + startPoint + " " + endPoint;
+        return "Switch " + name + " " + startPoint + " " + endPoint;
     }
 //    @Override
 //    public void run() {

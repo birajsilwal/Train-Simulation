@@ -13,7 +13,7 @@ public class Train implements Runnable{
         private Boolean canChangeDirection;
         private int speed;
         private Boolean travelRight;
-        private Rail rail;
+        protected Rail rail;
         protected LinkedBlockingQueue<Message> inbox;
         protected LinkedList<Rail> path;
         protected boolean running;
@@ -24,6 +24,7 @@ public class Train implements Runnable{
                 travelRight = false;
                 running = false;
                 possiblePaths = 0;
+                rail = null;
         }
 
         public Train(Station s, Station d, Boolean ccd) {
@@ -34,23 +35,25 @@ public class Train implements Runnable{
                 path = new LinkedList<>();
         }
 
-        public void setStartRail(Rail r) {
+        public synchronized void setStartRail(Rail r) {
+                System.out.println("Setting start rail to: "+ r);
                 rail = r;
         }
 
-        public synchronized void moveTrain(LinkedList<Rail> p) {
+        public synchronized void moveTrain(LinkedList<Rail> p) throws InterruptedException {
                 // TODO: if there is a valid path, then move the train
-//                System.out.println("We are in moveTrain");
+                System.out.println("We are in moveTrain, move right="+ travelRight);
                 path = p;
+                wait(1000);
                 // moving train to other track
                 if(travelRight) {
-//                        System.out.println("We want to move right");
+                        System.out.println("We want to move right");
                         TravelMessage m = new TravelMessage(rail.right, rail);
                         rail.right.receiveMessage(m);
                 }else{
 //                        System.out.println("We want to move left");
                         TravelMessage m = new TravelMessage(rail.left, rail);
-//                        rail.left.receiveMessage(m);
+                        rail.left.receiveMessage(m);
                 }
                 // otherwise return false
                 // need positional data i.e. x y
@@ -64,9 +67,10 @@ public class Train implements Runnable{
 
         }
 
-        private synchronized void updateLocation(Rail newRail, Rail oldRail,boolean arrived){
+        private synchronized void updateLocation(Rail newRail, Rail oldRail,boolean arrived) throws InterruptedException {
                 //Move to the new rail
                 rail = newRail;
+                System.out.println("Train Location: "+ rail);
                 //Let the rail know that I am on him
                 rail.hasTheTrain = true;
                 oldRail.hasTheTrain = false;
@@ -87,7 +91,7 @@ public class Train implements Runnable{
                 //processMessage();
         }
 
-        public synchronized void processMessage() {
+        public synchronized void processMessage() throws InterruptedException {
                 while (inbox.isEmpty()) {
                         try {
                                 //sleep()  ??
@@ -96,13 +100,11 @@ public class Train implements Runnable{
                                 e.printStackTrace();
                         }
                 }
-                notifyAll();
+                //notifyAll();
 //                System.out.println("Train Processing a message");
 
                 //Is it a seek message?
-                SeekMessage tempM = new SeekMessage();
-                SplitMessage tempSplitM = new SplitMessage();
-                if(inbox.peek().getClass().isInstance(tempM)) {
+                if(inbox.peek() instanceof SeekMessage) {
 //                        System.out.println("We have a seek message");
                         SeekMessage m = (SeekMessage) inbox.remove();
                         notifyAll();
@@ -119,6 +121,7 @@ public class Train implements Runnable{
                                 }
                                 //Generate a moving message to a rail, there is a response, the rain moves
                                 System.out.println("Train: We have found a valid path and its time to move");
+                                System.out.println(travelRight);
                                 moveTrain(m.path);
                         }else if(!m.validPath && !m.seekPath){//We have a dead end path
                                 possiblePaths--;
@@ -127,12 +130,12 @@ public class Train implements Runnable{
                                 }
                         }
                 }
-                else if(inbox.peek().getClass().isInstance(tempSplitM)){
+                else if(inbox.peek() instanceof SplitMessage){
                         inbox.remove();
                         possiblePaths++;
                 }
                 else {
-//                        System.out.println("Train got a TravelMessage");
+                        System.out.println("Train got a TravelMessage");
                         TravelMessage m = (TravelMessage) inbox.remove();
 
                         if (m.arrivedAtDestination) {
@@ -153,7 +156,7 @@ public class Train implements Runnable{
         }
         // setter src and dest
         /**@return source gives us the location of source*/
-        public Station getSource() { return source; }
+        public Rail getCurrentLocation() { return rail; }
 
         /**@return destination gives us the location of destination*/
         public Station getDestination() { return destination; }
@@ -169,7 +172,11 @@ public class Train implements Runnable{
         public void run() {
                 System.out.println("Train has started");
                 while (Thread.currentThread().isAlive()) {
-                        processMessage();
+                        try {
+                                processMessage();
+                        } catch (InterruptedException e) {
+                                e.printStackTrace();
+                        }
                 }
                 //processMessage();
         }

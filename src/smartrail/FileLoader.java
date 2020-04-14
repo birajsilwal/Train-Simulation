@@ -10,9 +10,9 @@ import java.util.List;
 
 public class FileLoader {
 
-    private List<LinkedList<Rail>> railSystem;
-    private List<Station> stations;
-    private List<Switch> switches;
+    protected List<LinkedList<Rail>> railSystem;
+    protected LinkedList<Station> stations;
+    protected LinkedList<Switch> switches;
     private Station rootStation;//We will have to increase this to an array later to deal with parallel tracks
     private Display display;
     private Pane pane;
@@ -23,20 +23,13 @@ public class FileLoader {
         //make the track
         makeTrack();
         //display = new Display(pane, this);
-        //While loop---------------------
-        //Make a move
-
-        //See if the move makes sense
-
-        //move the train
-        //End of while loop-------------
     }
     /*
     Reads in the file and makes LinkedLists for the tracks, stations, and switches
      */
-    public void readInTrack(Train train){
+    public synchronized void readInTrack(Train train){
         try {
-            BufferedReader in = new BufferedReader(new FileReader("resources/test.txt"));
+            BufferedReader in = new BufferedReader(new FileReader("resources/simple_switch.txt"));
             String line = null;
             railSystem = new LinkedList<>();
             stations = new LinkedList<>();
@@ -94,8 +87,6 @@ public class FileLoader {
                         stations.add(new Station(stationNum,
                                 new Point(Integer.parseInt(arr[1]),
                                         Integer.parseInt(arr[2])),train));
-
-
                         stationNum++;
                         break;
 
@@ -114,7 +105,7 @@ public class FileLoader {
         }
     }
 
-    public void makeTrack(){
+    public synchronized void makeTrack(){
         rootStation = null;
 
         //Make the stations connect where the coordinates match
@@ -141,17 +132,20 @@ public class FileLoader {
                 }
             }
         }
+//        for(Station s:stations){
+//            System.out.println("Station: " +s);
+//        }
         //Set the switches
         for(LinkedList<Rail> rails : railSystem){
-            for(Rail rail:rails) {
+            for(Rail rail : rails) {
                 for (Switch s : switches) {
                     if (rail.startPoint.xcoor == s.startPoint.xcoor && rail.startPoint.ycoor == s.startPoint.ycoor){
-                        System.out.println("Startpoint " + rail.startPoint);
+                        //System.out.println("Startpoint " + rail.startPoint);
                         rail.rightSwitch = s;
                         s.left = rail;
                     }
                     else if(s.right == null && rail.startPoint.xcoor == s.startPoint.xcoor+1 && rail.startPoint.ycoor > s.startPoint.ycoor){
-                        System.out.println("Endpoint " + rail);
+                        //System.out.println("Endpoint " + rail);
                         s.endPoint = rail.startPoint;
                         s.right = rail;
                         rail.leftSwitch = s;
@@ -159,19 +153,35 @@ public class FileLoader {
                 }
             }
         }
-
+//        for(LinkedList<Rail> rails: railSystem){
+//            for(Rail r: rails){
+//                System.out.println("rail " +r);
+//            }
+//        }
+//        for(Switch s:switches){
+//            System.out.println("Switch: " +s);
+//        }
 //        initGUI(railSystem, stations, switches);
         getSwitches1(switches);
 
     }
 
     public void getSwitches1(List<Switch> switchesList) {
-        System.out.println("This is the size of the switches: " + stations.size());
-        System.out.println("This is switches ll: " + switchesList);
+//        System.out.println("This is the size of the switches: " + stations.size());
+//        System.out.println("This is switches ll: " + switchesList);
 
     }
-
-    public List<Station> getStation() {
+    private void setStations(LinkedList<Station> s){
+        for(Station st :s){
+            System.out.println("set Station " + st);
+        }
+        stations = null;
+        stations = s;
+    }
+    public LinkedList<Station> getStation() {
+        for(Station s :stations){
+            System.out.println("1Station " + s);
+        }
         return stations;
     }
 

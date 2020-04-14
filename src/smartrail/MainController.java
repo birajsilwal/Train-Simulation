@@ -38,26 +38,24 @@ public class MainController extends Application {
         //fileLoader.readTrack - reading config here
 
 
-        Station station = fileLoader.getRailSystem();
+        Station root = fileLoader.getRailSystem();
 
+        train.setStartRail(root);
 
-        train.setStartRail(station);
-        Rail thisStation = station;
-        initGUI(station, primaryStage);
 
         Thread trainThread = new Thread(train);
         trainThread.start();
 
-        startThreads(station);
-
-        while(thisStation.right != null) {
-            if(thisStation.rightSwitch != null){
-                thisStation = thisStation.rightSwitch;
-            }else{
-                thisStation = thisStation.right;
-            }
-        }
-        System.out.println(thisStation);
+        startThreads(root);
+        initGUI(root, primaryStage,train);
+//        while(thisStation.right != null) {
+//            System.out.println(thisStation);
+//            if(thisStation.rightSwitch != null){
+//                thisStation = thisStation.rightSwitch;
+//            }else{
+//                thisStation = thisStation.right;
+//            }
+//        }
 //        Station s = (Station)thisStation;
 //        s.selectedAsTarget();
 
@@ -96,7 +94,7 @@ public class MainController extends Application {
 
 
     /* GUI starts from here */
-    private void initGUI(Rail root, Stage primaryStage) {
+    private synchronized void initGUI(Rail root, Stage primaryStage, Train t) {
         pane = new Pane();
         borderPane = new BorderPane();
         mainPane = new AnchorPane();
@@ -107,7 +105,8 @@ public class MainController extends Application {
         Scene scene = new Scene(borderPane, widthOfMainPane, heightOfMainPane);
         primaryStage.setTitle(" ");
         primaryStage.setScene(scene);
-        display = new Display(pane, root, fileLoader.getStation(), fileLoader.getSwitches());
+//        display = new Display(pane, root, fileLoader.getStation(), fileLoader.getSwitches(),train);
+        display = new Display(pane,root,t);
         display.start();
         primaryStage.show();
 

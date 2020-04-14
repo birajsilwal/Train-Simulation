@@ -70,9 +70,8 @@ public class Station extends Rail{
                 e.printStackTrace();
             }
         }
-        SeekMessage tempSeekM = new SeekMessage();
 
-        if(inbox.peek().getClass().isInstance(tempSeekM)) {
+        if(inbox.peek() instanceof SeekMessage) {
 //            System.out.println(this + " has a seek message");
             SeekMessage m = (SeekMessage) inbox.remove();
 
@@ -94,7 +93,7 @@ public class Station extends Rail{
                         m.stationSent = this;
                         m.addToPath(this);
                         right.receiveMessage(m);
-                    } else if(right != null && !m.travelingRight) {
+                    } else if(left != null){ //if(right != null && !m.travelingRight) {
                         m.stationSent = this;
                         m.addToPath(this);
                         left.receiveMessage(m);

@@ -54,11 +54,10 @@ public class Rail implements Runnable{
                 e.printStackTrace();
             }
         }
-//        System.out.println(this + " processing message");
+        System.out.println(this + " processing message");
         //notifyAll();
         //Is it a seek message?
-        SeekMessage tempM = new SeekMessage();
-        if(inbox.peek().getClass().isInstance(tempM)) {
+        if(inbox.peek() instanceof SeekMessage) {
             System.out.println(this + " has a seek message");
 
             SeekMessage m = (SeekMessage) inbox.remove();
@@ -71,6 +70,7 @@ public class Rail implements Runnable{
             if (m.seekPath) {
                 //You have not found the place you want to be and the message needs to keep going
                 if (m.travelingRight) {
+                    System.out.println("Message traveling right");
                     m.addToPath(this);
                     m.stationSent = this;
                     right.receiveMessage(m);
@@ -79,6 +79,7 @@ public class Rail implements Runnable{
                         sendSplitMessage();
                     }
                 } else {
+                    System.out.println("Message traveling left");
                     m.addToPath(this);
                     m.stationSent = this;
                     left.receiveMessage(m);

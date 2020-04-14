@@ -13,6 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import sun.awt.image.ImageWatched;
+import sun.swing.plaf.synth.DefaultSynthStyle;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,30 +25,45 @@ public class Display extends AnimationTimer {
     private AnchorPane mainPane;
     private Rail rail;
     private LinkedList<Station> selectedStations;
+    private Train train;
+    private LinkedList<Switch> switches;
+    private LinkedList<Rail> rails;
+    private LinkedList<Station> stations;
 
-    Display(Pane pane, Rail r, List<Station> stations, List<Switch> switches) {
-        this.pane = pane;
-        rail = r;
-        drawStation(stations);
-        drawSwitches(switches);
-        selectedStations = new LinkedList<>();
-
-    }
-
-//    public void recFinder(Rail railManager) {
+//    Display(Pane pane, Rail r, LinkedList<Station> stations, LinkedList<Switch> switches) {
+//        this.pane = pane;
+//        rail = r;
+//        drawStation(stations);
+//        drawSwitches(switches);
+//        selectedStations = new LinkedList<>();
+//        train = null;
 //
-//        //If already visited, don't go there
-//        if (railManager instanceof Station) {
-//            drawStation(railManager.startPoint);
-//        }
-////        }else if(railManager.getClass().isInstance(tempSwitch)){
-////            drawSwitch(railManager);
-////        }
-//        if (railManager.right != null) recFinder(railManager.right);
-//        if (railManager.left != null) recFinder(railManager.left);
-//        if (railManager.rightSwitch != null) recFinder(railManager.rightSwitch);
-//        if (railManager.leftSwitch != null) recFinder(railManager.leftSwitch);
 //    }
+    Display(Pane p, Rail root, Train t){
+        train = t;
+        pane = p;
+        rail = root;
+        stations = new LinkedList<>();
+        switches = new LinkedList<>();
+        rails = new LinkedList<>();
+
+//        drawStation(fl.stations);
+//        drawSwitches(fl.switches);
+        recFinder(root,root);
+        drawStation();
+        drawSwitches();
+        selectedStations = new LinkedList<>();
+    }
+    public void recFinder(Rail r,Rail last) {
+        if(r instanceof Station){ stations.add((Station)r);}
+        else if(r instanceof Switch){ switches.add((Switch)r);}
+        else{ rails.add(r);}
+
+        if (r.right != null && r.right != last) recFinder(r.right, r);
+        if (r.left != null && r.left != last) recFinder(r.left, r);
+        if (r.rightSwitch != null && r.rightSwitch != last) recFinder(r.rightSwitch, r);
+        if (r.leftSwitch != null && r.leftSwitch != last) recFinder(r.leftSwitch, r);
+    }
 
     public Rectangle drawTrain() {
         Rectangle train1 = new Rectangle(70, 30);
@@ -59,12 +75,18 @@ public class Display extends AnimationTimer {
 
     /* later on we need to make config file so that we do not
      have to create every track and stations manually.*/
-    public void drawStation(List<Station> stations) {
+//    public void drawStation(List<Station> stations) {
+//        for (Station station : stations) {
+//            System.out.println("Station " + station);
+//            pane.getChildren().addAll(setStation(station));
+//        }
+//    }
+    public void drawStation() {
         for (Station station : stations) {
+            System.out.println("Station " + station);
             pane.getChildren().addAll(setStation(station));
         }
     }
-
 
     public Rectangle setStation(Station station) {
         String imagePath = ("Image/station.png");
@@ -77,10 +99,16 @@ public class Display extends AnimationTimer {
         rectangle.setOnMouseClicked(event -> {
             selectedStations.add(station);
             System.out.println("selected stations: " + selectedStations);
-            if (selectedStations.size() == 2) {
-                setSourceDestination(selectedStations);
-                selectedStations.clear();
-            }
+//            if (selectedStations.size() == 2) {
+//                try{
+//                    setSourceDestination(selectedStations);
+//                }catch(Exception e){
+//                    System.out.println("things happened, and I do not like it ");
+//                }
+//
+//                selectedStations.clear();
+//            }
+            setSourceDestination(station);
             rectangle.setStroke(Color.DARKGREEN);
             rectangle.setStrokeWidth(5);
         });
@@ -88,8 +116,15 @@ public class Display extends AnimationTimer {
         return rectangle;
     }
 
-    public void drawSwitches(List<Switch> switches) {
+//    public void drawSwitches(LinkedList<Switch> switches) {
+//        for(Switch sw : switches) {
+//            System.out.println("Switchs " + switches);
+//            pane.getChildren().addAll(setSwitch(sw));
+//        }
+//    }
+    public void drawSwitches() {
         for(Switch sw : switches) {
+            System.out.println("Switchs " + switches);
             pane.getChildren().addAll(setSwitch(sw));
         }
     }
@@ -102,19 +137,53 @@ public class Display extends AnimationTimer {
         return circle;
     }
 
-    /**
-     * @param selectedStations is set as a train. This method moves rectangle from x to y
-     */
-    public synchronized void setSourceDestination(LinkedList<Station> selectedStations) {
+//    /**
+//     * @param selectedStations is set as a train. This method moves rectangle from x to y
+//     */
+//    public synchronized void setSourceDestination(LinkedList<Station> selectedStations) throws InterruptedException {
+//
+//        Station source = selectedStations.getFirst();
+//        Station destination = selectedStations.getLast();
+//
+//        train.setStartRail(source);
+//        Thread.currentThread().join(1000);
+//        source.selectedAsTarget();//Checks to see if the path is valid
+//
+//        int startX = (source.startPoint.xcoor + 1) * 70;
+//        int startY = (source.startPoint.ycoor + 1) * 70;
+//
+//        int endX = (destination.startPoint.xcoor - 1) * 70;
+//        int endY = (destination.startPoint.ycoor);
+//
+//        String imagePath = ("Image/trainLeft.png");
+//        Image image = new Image(imagePath);
+//        Rectangle train = new Rectangle(60, 30);
+//        train.setFill(new ImagePattern(image));
+//
+//        train.setLayoutX(startX);
+//        train.setLayoutY(startY);
+//
+//        TranslateTransition translateTransition = new TranslateTransition();
+//        translateTransition.setDuration(Duration.seconds(10));
+//
+//        translateTransition.setToX(endX);
+//        translateTransition.setToY(endY);
+//        System.out.println("To: " + endX + " " + endY);
+//
+//        pane.getChildren().addAll(train);
+//        translateTransition.setNode(train);
+//        translateTransition.play();
+//        start();
+//    }
+    public void setSourceDestination(Station s) {
 
-        Station source = selectedStations.getFirst();
-        Station destination = selectedStations.getLast();
+        s.selectedAsTarget();//Checks to see if the path is valid
 
-        int startX = (source.startPoint.xcoor + 1) * 70;
-        int startY = (source.startPoint.ycoor + 1) * 70;
+        int startX = (train.getCurrentLocation().startPoint.xcoor + 1) * 70;
+        int startY = (train.getCurrentLocation().startPoint.ycoor + 1) * 70;
 
-        int endX = (destination.startPoint.xcoor - 1) * 70;
-        int endY = (destination.startPoint.ycoor);
+        int endX = (s.startPoint.xcoor - 1) * 70;
+        int endY = (s.startPoint.ycoor);
 
         String imagePath = ("Image/trainLeft.png");
         Image image = new Image(imagePath);
@@ -136,7 +205,6 @@ public class Display extends AnimationTimer {
         translateTransition.play();
         start();
     }
-
     /**
      * @return track. This method draws track
      */
