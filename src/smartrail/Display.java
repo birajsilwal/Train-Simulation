@@ -9,14 +9,17 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.omg.CORBA.CODESET_INCOMPATIBLE;
 import sun.awt.image.ImageWatched;
 import sun.swing.plaf.synth.DefaultSynthStyle;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Display extends AnimationTimer {
 
@@ -30,15 +33,6 @@ public class Display extends AnimationTimer {
     private LinkedList<Rail> rails;
     private LinkedList<Station> stations;
 
-//    Display(Pane pane, Rail r, LinkedList<Station> stations, LinkedList<Switch> switches) {
-//        this.pane = pane;
-//        rail = r;
-//        drawStation(stations);
-//        drawSwitches(switches);
-//        selectedStations = new LinkedList<>();
-//        train = null;
-//
-//    }
     Display(Pane p, Rail root, Train t){
         train = t;
         pane = p;
@@ -47,23 +41,49 @@ public class Display extends AnimationTimer {
         switches = new LinkedList<>();
         rails = new LinkedList<>();
 
-//        drawStation(fl.stations);
-//        drawSwitches(fl.switches);
         recFinder(root,root);
         drawStation();
         drawSwitches();
+        setRail();
         selectedStations = new LinkedList<>();
     }
+
     public void recFinder(Rail r,Rail last) {
-        if(r instanceof Station){ stations.add((Station)r);}
+        /*this is for the station*/
+        if(r instanceof Station){
+            stations.add((Station)r);
+        }
+
+        /*this is for the switch*/
         else if(r instanceof Switch){ switches.add((Switch)r);}
-        else{ rails.add(r);}
+
+        /*this is for the rail*/
+        else {
+            rails.add(r);
+        }
 
         if (r.right != null && r.right != last) recFinder(r.right, r);
         if (r.left != null && r.left != last) recFinder(r.left, r);
         if (r.rightSwitch != null && r.rightSwitch != last) recFinder(r.rightSwitch, r);
         if (r.leftSwitch != null && r.leftSwitch != last) recFinder(r.leftSwitch, r);
     }
+
+    public void setRail() {
+        for (Rail rail : rails) {
+            System.out.println("rails " + rail);
+
+            Image image = new Image("Image/track.png");
+
+            Rectangle rectangle = new Rectangle(70, 40);
+            rectangle.setFill(new ImagePattern(image));
+            rectangle.setTranslateX((rail.getStartPoint().xcoor + 1) * 70);
+            rectangle.setTranslateY((rail.getStartPoint().ycoor + 1) * 70);
+            rectangle.setArcWidth(20);
+
+            pane.getChildren().add(rectangle);
+        }
+    }
+
 
     public Rectangle drawTrain() {
         Rectangle train1 = new Rectangle(70, 30);
@@ -93,7 +113,13 @@ public class Display extends AnimationTimer {
         Image image = new Image(imagePath);
         Rectangle rectangle = new Rectangle(60, 60);
         rectangle.setFill(new ImagePattern(image));
-        rectangle.setTranslateX(station.startPoint.xcoor * 70);
+
+        // if its a right sided station then add 1 to its xcoor
+        if (station.startPoint.xcoor > 0) {
+            rectangle.setTranslateX((station.startPoint.xcoor + 1) * 70);
+        } else {
+            rectangle.setTranslateX(station.startPoint.xcoor * 70);
+        }
         rectangle.setTranslateY((station.startPoint.ycoor + 1) * 70);
 
         rectangle.setOnMouseClicked(event -> {
@@ -132,7 +158,7 @@ public class Display extends AnimationTimer {
     public Circle setSwitch(Switch sw) {
         Circle circle = new Circle(10);
         circle.setFill(Color.BLACK);
-        circle.setTranslateX(sw.startPoint.xcoor * 70);
+        circle.setTranslateX(sw.startPoint.xcoor * (70 + (rails.size())));
         circle.setTranslateY((sw.startPoint.ycoor + 1)  * 80);
         return circle;
     }
@@ -182,7 +208,7 @@ public class Display extends AnimationTimer {
         int startX = (train.getCurrentLocation().startPoint.xcoor + 1) * 70;
         int startY = (train.getCurrentLocation().startPoint.ycoor + 1) * 70;
 
-        int endX = (s.startPoint.xcoor - 1) * 70;
+        int endX = (s.startPoint.xcoor) * 70;
         int endY = (s.startPoint.ycoor);
 
         String imagePath = ("Image/trainLeft.png");

@@ -5,9 +5,8 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -101,6 +100,7 @@ public class MainController extends Application {
         group = new Group();
 
         borderPane.setCenter(pane);
+//        borderPane.setBackground(new Background(new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
 //        borderPane.setPadding(new Insets(50, 50, 0,50));
         Scene scene = new Scene(borderPane, widthOfMainPane, heightOfMainPane);
         primaryStage.setTitle(" ");
