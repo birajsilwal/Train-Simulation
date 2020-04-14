@@ -100,10 +100,9 @@ public class MainController extends Application {
         group = new Group();
 
         borderPane.setCenter(pane);
-//        borderPane.setBackground(new Background(new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
 //        borderPane.setPadding(new Insets(50, 50, 0,50));
         Scene scene = new Scene(borderPane, widthOfMainPane, heightOfMainPane);
-        primaryStage.setTitle(" ");
+        primaryStage.setTitle("SmartRail ");
         primaryStage.setScene(scene);
 //        display = new Display(pane, root, fileLoader.getStation(), fileLoader.getSwitches(),train);
         display = new Display(pane,root,t);

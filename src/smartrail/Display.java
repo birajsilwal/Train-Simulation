@@ -2,8 +2,6 @@ package smartrail;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -11,15 +9,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.omg.CORBA.CODESET_INCOMPATIBLE;
-import sun.awt.image.ImageWatched;
-import sun.swing.plaf.synth.DefaultSynthStyle;
 
 import java.util.LinkedList;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class Display extends AnimationTimer {
 
@@ -74,7 +66,7 @@ public class Display extends AnimationTimer {
 
             Image image = new Image("Image/track.png");
 
-            Rectangle rectangle = new Rectangle(70, 40);
+            Rectangle rectangle = new Rectangle(70, 50);
             rectangle.setFill(new ImagePattern(image));
             rectangle.setTranslateX((rail.getStartPoint().xcoor + 1) * 70);
             rectangle.setTranslateY((rail.getStartPoint().ycoor + 1) * 70);
@@ -82,15 +74,6 @@ public class Display extends AnimationTimer {
 
             pane.getChildren().add(rectangle);
         }
-    }
-
-
-    public Rectangle drawTrain() {
-        Rectangle train1 = new Rectangle(70, 30);
-        String imagePath = ("Image/trainLeft.png");
-        Image image = new Image(imagePath);
-        train1.setFill(new ImagePattern(image));
-        return train1;
     }
 
     /* later on we need to make config file so that we do not
@@ -150,9 +133,30 @@ public class Display extends AnimationTimer {
 //    }
     public void drawSwitches() {
         for(Switch sw : switches) {
-            System.out.println("Switchs " + switches);
+            Point switchStartPoint = sw.startPoint;
+            Point switchEndPoint = sw.endPoint;
+            System.out.println("This is switch's start point: " + switchStartPoint);
+            System.out.println("This is switch's end point: " + switchEndPoint);
+
+            drawSwitchTrack(switchStartPoint, switchEndPoint);
+
             pane.getChildren().addAll(setSwitch(sw));
         }
+    }
+
+    public void drawSwitchTrack(Point switchStartPoint, Point switchEndPoint) {
+        Line switchTrack = new Line();
+//        Rectangle switchTrack = new Rectangle();
+        switchTrack.setStartX((switchStartPoint.xcoor) * 70);
+        switchTrack.setStartY((switchStartPoint.ycoor + 1) * 70);
+
+        switchTrack.setEndX((switchEndPoint.xcoor + 1) * 70);
+        switchTrack.setEndY((switchEndPoint.ycoor + 1) * 70);
+
+        switchTrack.setStroke(Color.RED);
+        switchTrack.setStrokeWidth(10);
+
+        pane.getChildren().add(switchTrack);
     }
 
     public Circle setSwitch(Switch sw) {
@@ -160,6 +164,7 @@ public class Display extends AnimationTimer {
         circle.setFill(Color.BLACK);
         circle.setTranslateX(sw.startPoint.xcoor * (70 + (rails.size())));
         circle.setTranslateY((sw.startPoint.ycoor + 1)  * 80);
+
         return circle;
     }
 
@@ -222,6 +227,13 @@ public class Display extends AnimationTimer {
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.seconds(10));
 
+
+
+
+
+
+
+
         translateTransition.setToX(endX);
         translateTransition.setToY(endY);
         System.out.println("To: " + endX + " " + endY);
@@ -231,21 +243,7 @@ public class Display extends AnimationTimer {
         translateTransition.play();
         start();
     }
-    /**
-     * @return track. This method draws track
-     */
-    public Rectangle drawTrack() {
-        Rectangle track = new Rectangle();
-        for (int i = 0; i < 5; i++) {
-            track = new Rectangle(60, 50);
-            String imagePath = ("Image/track.png");
-            Image image = new Image(imagePath);
-            track.setFill(new ImagePattern(image));
-            flowPane.getChildren().add(track);
-            track.relocate(30, 30);
-        }
-        return track;
-    }
+
 
     @Override
     public void handle(long now) {

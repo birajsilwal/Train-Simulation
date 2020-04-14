@@ -171,17 +171,8 @@ public class FileLoader {
 //        System.out.println("This is switches ll: " + switchesList);
 
     }
-    private void setStations(LinkedList<Station> s){
-        for(Station st :s){
-            System.out.println("set Station " + st);
-        }
-        stations = null;
-        stations = s;
-    }
-    public LinkedList<Station> getStation() {
-        for(Station s :stations){
-            System.out.println("1Station " + s);
-        }
+
+    public List<Station> getStation() {
         return stations;
     }
 
