@@ -73,7 +73,7 @@ public class Rail implements Runnable{
             }
             if (m.seekPath) {
                 //You have not found the place you want to be and the message needs to keep going
-                if (m.travelingRight) {
+                if (m.travelingRight && right != null ) {
                     System.out.println("Message traveling right");
                     m.addToPath(this);
                     m.stationSent = this;
@@ -81,17 +81,19 @@ public class Rail implements Runnable{
                     if (rightSwitch != null) {
                         SeekMessage sm = new SeekMessage(m);
                         rightSwitch.receiveMessage(sm);
-                        sendSplitMessage();
+                        sendSplitMessage(m);
                     }
                 } else {
                     System.out.println("Message traveling left");
                     m.addToPath(this);
                     m.stationSent = this;
-                    left.receiveMessage(new SeekMessage(m));
+                    if(left != null) {
+                        left.receiveMessage(new SeekMessage(m));
+                    }
                     if (leftSwitch != null) {
                         SeekMessage sm = new SeekMessage(m);
                         leftSwitch.receiveMessage(sm);
-                        sendSplitMessage();
+                        sendSplitMessage(m);
                     }
                 }
             }
@@ -107,9 +109,9 @@ public class Rail implements Runnable{
             train.receiveMessage(m);
         }
     }
-    public void sendSplitMessage(){
-        SplitMessage sm = new SplitMessage();
-
+    public void sendSplitMessage(SeekMessage m){
+        System.out.println(this + " sending SplitMessage to train");
+        SplitMessage sm = new SplitMessage(m.path);
         train.receiveMessage(sm);
     }
     @Override

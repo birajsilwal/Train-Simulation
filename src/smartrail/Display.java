@@ -33,6 +33,10 @@ public class Display extends AnimationTimer {
         rails = new LinkedList<>();
 
         recFinder(root,root);
+        System.out.println("\nSwitches:------------------------------------");
+        for(Switch s: switches){
+            System.out.println(s);
+        }
         drawStation();
         drawSwitches();
         setRail();

@@ -136,19 +136,51 @@ public class FileLoader {
 //            System.out.println("Station: " +s);
 //        }
         //Set the switches
+
+        //I need to alternate the switch connections:
+        // - down to the next rail's y, X+1
+        // - -> down the the next rail's y, X-1;
+        boolean downRight = true;
         for(LinkedList<Rail> rails : railSystem){
             for(Rail rail : rails) {
                 for (Switch s : switches) {
-                    if (rail.startPoint.xcoor == s.startPoint.xcoor && rail.startPoint.ycoor == s.startPoint.ycoor){
-                        //System.out.println("Startpoint " + rail.startPoint);
-                        rail.rightSwitch = s;
-                        s.left = rail;
+                    if(downRight) {   //   -> /
+                        if (rail.endPoint.xcoor == s.startPoint.xcoor &&
+                                rail.endPoint.ycoor == s.startPoint.ycoor &&
+                                rail.rightSwitch == null &&
+                                s.left == null) {
+                            //System.out.println("Startpoint " + rail.startPoint);
+                            rail.rightSwitch = s;
+                            s.left = rail;
+                        } else if (rail.startPoint.xcoor == s.startPoint.xcoor + 1
+                                   && rail.startPoint.ycoor > s.startPoint.ycoor
+                                   && s.right == null
+                                   && rail.leftSwitch == null) {
+                            //System.out.println("Endpoint " + rail);
+                            s.endPoint = rail.startPoint;
+                            s.right = rail;
+                            rail.leftSwitch = s;
+                            downRight = false;
+                        }
                     }
-                    else if(s.right == null && rail.startPoint.xcoor == s.startPoint.xcoor+1 && rail.startPoint.ycoor > s.startPoint.ycoor){
-                        //System.out.println("Endpoint " + rail);
-                        s.endPoint = rail.startPoint;
-                        s.right = rail;
-                        rail.leftSwitch = s;
+                    else if(!downRight) {//downleft   ->  /
+                        if (rail.endPoint.xcoor+1 == s.startPoint.xcoor &&
+                                rail.endPoint.ycoor > s.startPoint.ycoor &&
+                                rail.rightSwitch == null &&
+                                s.left == null) {
+                            //System.out.println("Endpoint " + rail.endPoint);
+                            rail.rightSwitch = s;
+                            s.endPoint = rail.startPoint;
+                            s.left = rail;
+                        } else if (rail.startPoint.xcoor == s.startPoint.xcoor
+                                && rail.startPoint.ycoor == s.startPoint.ycoor
+                                && s.right == null
+                                && rail.leftSwitch == null) {
+                            //System.out.println("Startpoint " + rail);
+                            s.right = rail;
+                            rail.leftSwitch = s;
+                            downRight = false;
+                        }
                     }
                 }
             }

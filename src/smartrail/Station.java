@@ -51,7 +51,7 @@ public class Station extends Rail{
         //When selected, create a message and send it to the train
         Message message = createMessage();
         train.receiveMessage(message);
-        System.out.println("Exit selectAsTarget");
+//        System.out.println("Exit selectAsTarget");
     }
 
     @Override
@@ -104,7 +104,7 @@ public class Station extends Rail{
                     System.out.println("You are at " + this + " and it is not a valid path");
                     m.validPath = false;
                     m.seekPath = false;
-                    m.clearPath();
+                    //m.clearPath();
                     train.receiveMessage(m);
                 }
             }

@@ -59,7 +59,7 @@ public class MainController extends Application {
 //        s.selectedAsTarget();
 
         //initGUI(root, primaryStage);
-        //printThreads();
+        printThreads();
         //printRails(station);
     }
 

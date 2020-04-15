@@ -130,6 +130,11 @@ public class Train implements Runnable{
                                 System.out.println("Train: We have found a valid path and its time to move");
                                 moveTrain(m.path);
                         }else if(!m.validPath && !m.seekPath){//We have a dead end path
+                                System.out.println("Recieved a deadend on path:");
+                                for(Rail r: m.path){
+                                        System.out.println(r);
+                                }
+                                System.out.println();
                                 possiblePaths--;
                                 if(possiblePaths == 0){
                                         System.out.println("There are no valid paths to the Destination");
@@ -137,8 +142,16 @@ public class Train implements Runnable{
                         }
                 }
                 else if(inbox.peek() instanceof SplitMessage){
-                        inbox.remove();
-                        possiblePaths++;
+                        System.out.println("Train recieved a split message:\n Path:");
+                        if(isTraveling){
+                                inbox.remove();
+                        }else {
+                                LinkedList<Rail> tempPath = inbox.remove().path;
+                                for (Rail r : tempPath) {
+                                        System.out.println(r);
+                                }
+                                possiblePaths++;
+                        }
                 }
                 else {
                         System.out.println("Train got a TravelMessage");
