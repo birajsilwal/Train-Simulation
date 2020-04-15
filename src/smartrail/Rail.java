@@ -73,18 +73,20 @@ public class Rail implements Runnable{
                     System.out.println("Message traveling right");
                     m.addToPath(this);
                     m.stationSent = this;
-                    right.receiveMessage(m);
+                    right.receiveMessage(new SeekMessage(m));
                     if (rightSwitch != null) {
-                        rightSwitch.receiveMessage(m);
+                        SeekMessage sm = new SeekMessage(m);
+                        rightSwitch.receiveMessage(sm);
                         sendSplitMessage();
                     }
                 } else {
                     System.out.println("Message traveling left");
                     m.addToPath(this);
                     m.stationSent = this;
-                    left.receiveMessage(m);
+                    left.receiveMessage(new SeekMessage(m));
                     if (leftSwitch != null) {
-                        leftSwitch.receiveMessage(m);
+                        SeekMessage sm = new SeekMessage(m);
+                        leftSwitch.receiveMessage(sm);
                         sendSplitMessage();
                     }
                 }
@@ -102,8 +104,9 @@ public class Rail implements Runnable{
         }
     }
     public void sendSplitMessage(){
-        SplitMessage m = new SplitMessage();
-        train.receiveMessage(m);
+        SplitMessage sm = new SplitMessage();
+
+        train.receiveMessage(sm);
     }
     @Override
     public String toString() {
@@ -118,7 +121,7 @@ public class Rail implements Runnable{
     public void run() {
 //        System.out.println(this + " is running");
         while (Thread.currentThread().isAlive()) {
-                        this.processMessage();
+                        processMessage();
                 }
     }
 

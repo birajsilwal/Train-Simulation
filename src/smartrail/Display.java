@@ -33,6 +33,8 @@ public class Display extends AnimationTimer {
         switches = new LinkedList<>();
         rails = new LinkedList<>();
 
+//        drawStation(fl.stations);
+//        drawSwitches(fl.switches);
         recFinder(root,root);
         drawStation();
         drawSwitches();
@@ -106,8 +108,9 @@ public class Display extends AnimationTimer {
         rectangle.setTranslateY((station.startPoint.ycoor + 1) * 70);
 
         rectangle.setOnMouseClicked(event -> {
-            selectedStations.add(station);
-            System.out.println("selected stations: " + selectedStations);
+            if(!train.isTraveling) {//Don't make any selections while the train is traveling
+                selectedStations.add(station);
+                System.out.println("selected stations: " + selectedStations);
 //            if (selectedStations.size() == 2) {
 //                try{
 //                    setSourceDestination(selectedStations);
@@ -117,9 +120,10 @@ public class Display extends AnimationTimer {
 //
 //                selectedStations.clear();
 //            }
-            setSourceDestination(station);
-            rectangle.setStroke(Color.DARKGREEN);
-            rectangle.setStrokeWidth(5);
+                setSourceDestination(station);
+                rectangle.setStroke(Color.DARKGREEN);
+                rectangle.setStrokeWidth(5);
+            }
         });
 
         return rectangle;
@@ -133,13 +137,7 @@ public class Display extends AnimationTimer {
 //    }
     public void drawSwitches() {
         for(Switch sw : switches) {
-            Point switchStartPoint = sw.startPoint;
-            Point switchEndPoint = sw.endPoint;
-            System.out.println("This is switch's start point: " + switchStartPoint);
-            System.out.println("This is switch's end point: " + switchEndPoint);
-
-            drawSwitchTrack(switchStartPoint, switchEndPoint);
-
+            System.out.println("Switchs " + switches);
             pane.getChildren().addAll(setSwitch(sw));
         }
     }
@@ -227,13 +225,6 @@ public class Display extends AnimationTimer {
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setDuration(Duration.seconds(10));
 
-
-
-
-
-
-
-
         translateTransition.setToX(endX);
         translateTransition.setToY(endY);
         System.out.println("To: " + endX + " " + endY);
@@ -243,8 +234,28 @@ public class Display extends AnimationTimer {
         translateTransition.play();
         start();
     }
-
-
+    /**
+     * @return track. This method draws track
+     */
+    public Rectangle drawTrack() {
+        Rectangle track = new Rectangle();
+        for (int i = 0; i < 5; i++) {
+            track = new Rectangle(60, 50);
+            String imagePath = ("Image/track.png");
+            Image image = new Image(imagePath);
+            track.setFill(new ImagePattern(image));
+            flowPane.getChildren().add(track);
+            track.relocate(30, 30);
+        }
+        return track;
+    }
+//    public Circle setSwitch(Switch sw) {
+//        Circle circle = new Circle(10);
+//        circle.setFill(Color.BLACK);
+//        circle.setTranslateX(sw.startPoint.xcoor * 70);
+//        circle.setTranslateY((sw.startPoint.ycoor + 1)  * 80);
+//        return circle;
+//    }
     @Override
     public void handle(long now) {
 //        drawStation();

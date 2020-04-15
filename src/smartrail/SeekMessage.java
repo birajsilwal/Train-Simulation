@@ -13,6 +13,17 @@ public class SeekMessage extends Message {
         super();
         //path = new LinkedList<>();
     }
+    public SeekMessage(SeekMessage m){
+        super();
+        for(Rail r: m.path){
+            path.add(r);
+        }
+        travelingRight = m.travelingRight;
+        validPath = m.validPath;
+        seekPath = m.seekPath;
+        stationSent = m.stationSent;
+        stationTarget = m.stationTarget;
+    }
     public void addToPath(Rail rail){
         path.add(rail);
     }
