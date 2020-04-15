@@ -30,6 +30,10 @@ public class Rail implements Runnable{
         hasTheTrain = false;
     }
 
+    public Rail() {
+
+    }
+
     public void setLeft(Rail l){
         left = l;
     }

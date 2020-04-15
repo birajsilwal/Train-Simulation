@@ -1,14 +1,13 @@
 package smartrail;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.PathTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.util.Duration;
 
 import java.util.LinkedList;
@@ -125,12 +124,6 @@ public class Display extends AnimationTimer {
         return rectangle;
     }
 
-//    public void drawSwitches(LinkedList<Switch> switches) {
-//        for(Switch sw : switches) {
-//            System.out.println("Switchs " + switches);
-//            pane.getChildren().addAll(setSwitch(sw));
-//        }
-//    }
     public void drawSwitches() {
         for(Switch sw : switches) {
             Point switchStartPoint = sw.startPoint;
@@ -139,8 +132,6 @@ public class Display extends AnimationTimer {
             System.out.println("This is switch's end point: " + switchEndPoint);
 
             drawSwitchTrack(switchStartPoint, switchEndPoint);
-
-            pane.getChildren().addAll(setSwitch(sw));
         }
     }
 
@@ -157,15 +148,6 @@ public class Display extends AnimationTimer {
         switchTrack.setStrokeWidth(10);
 
         pane.getChildren().add(switchTrack);
-    }
-
-    public Circle setSwitch(Switch sw) {
-        Circle circle = new Circle(10);
-        circle.setFill(Color.BLACK);
-        circle.setTranslateX(sw.startPoint.xcoor * (70 + (rails.size())));
-        circle.setTranslateY((sw.startPoint.ycoor + 1)  * 80);
-
-        return circle;
     }
 
 //    /**
@@ -206,48 +188,62 @@ public class Display extends AnimationTimer {
 //        translateTransition.play();
 //        start();
 //    }
-    public void setSourceDestination(Station s) {
+    public void setSourceDestination(Station station) {
+        System.out.println("This is the clicked station: " + station);
+        int finalDestinationX = station.startPoint.xcoor;
+        int finalDestinationY = station.startPoint.ycoor;
 
-        s.selectedAsTarget();//Checks to see if the path is valid
+        station.selectedAsTarget();//Checks to see if the path is valid
 
-        int startX = (train.getCurrentLocation().startPoint.xcoor + 1) * 70;
-        int startY = (train.getCurrentLocation().startPoint.ycoor + 1) * 70;
+        int startXCoor = train.getCurrentLocation().startPoint.xcoor;
+        int startYCoor = train.getCurrentLocation().startPoint.ycoor;
 
-        int endX = (s.startPoint.xcoor) * 70;
-        int endY = (s.startPoint.ycoor);
+        int startXTranslation = (train.getCurrentLocation().startPoint.xcoor + 1) * 70;
+        int startYTranslation = (train.getCurrentLocation().startPoint.ycoor + 1) * 70;
+
+        int endX = (station.startPoint.xcoor) * 70;
+        int endY = (station.startPoint.ycoor);
 
         String imagePath = ("Image/trainLeft.png");
         Image image = new Image(imagePath);
-        Rectangle train = new Rectangle(60, 30);
-        train.setFill(new ImagePattern(image));
+        Rectangle trainRectangle = new Rectangle(60, 30);
+        trainRectangle.setFill(new ImagePattern(image));
 
-        train.setLayoutX(startX);
-        train.setLayoutY(startY);
+        trainRectangle.setLayoutX(startXTranslation);
+        trainRectangle.setLayoutY(startYTranslation);
 
-        TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setDuration(Duration.seconds(10));
+        PathTransition pathTransition = new PathTransition();
+        pathTransition.setDuration(Duration.seconds(10));
 
+        Path path = new Path();
+        LinkedList<Rail> pathFinal = train.getPath();
+        System.out.println("This is the whole path: " + pathFinal);
 
+        path.getElements().add(new MoveTo(0, 0));
+        if (endY > startYCoor) {
+            for (Rail currRail : pathFinal) {
+                if (currRail instanceof Switch) {
+                    path.getElements().add(new LineTo((currRail.startPoint.xcoor ) * 70, currRail.startPoint.ycoor));
+                    path.getElements().add(new LineTo(currRail.endPoint.xcoor * 70, currRail.endPoint.ycoor * 70));
+                    path.getElements().add(new LineTo(finalDestinationX * 70, finalDestinationY * 70));
+                    System.out.println("endX: " + finalDestinationX);
+                    System.out.println("endY: " + finalDestinationY);
+                }
+            }
+        } else {
+            path.getElements().add(new LineTo(endX, endY));
+        }
 
+        pane.getChildren().addAll(trainRectangle);
 
-
-
-
-
-        translateTransition.setToX(endX);
-        translateTransition.setToY(endY);
-        System.out.println("To: " + endX + " " + endY);
-
-        pane.getChildren().addAll(train);
-        translateTransition.setNode(train);
-        translateTransition.play();
-        start();
+        pathTransition.setNode(trainRectangle);
+        pathTransition.setPath(path);
+        pathTransition.play();
     }
 
 
     @Override
     public void handle(long now) {
-//        drawStation();
 
     }
 

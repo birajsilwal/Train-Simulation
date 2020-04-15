@@ -29,7 +29,7 @@ public class FileLoader {
      */
     public synchronized void readInTrack(Train train){
         try {
-            BufferedReader in = new BufferedReader(new FileReader("resources/simple_switch.txt"));
+            BufferedReader in = new BufferedReader(new FileReader("resources/simple_switch1.txt"));
             String line = null;
             railSystem = new LinkedList<>();
             stations = new LinkedList<>();

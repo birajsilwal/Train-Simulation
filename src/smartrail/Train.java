@@ -180,4 +180,9 @@ public class Train implements Runnable{
                 }
                 //processMessage();
         }
+
+        public LinkedList<Rail> getPath() {
+            return path;
+        }
+
 }
