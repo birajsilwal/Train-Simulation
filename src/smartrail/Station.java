@@ -80,14 +80,14 @@ public class Station extends Rail{
             if (m.seekPath) {
                 //You have found the place you want to be
                 if (m.stationTarget.startPoint.xcoor == startPoint.xcoor && m.stationTarget.startPoint.ycoor == startPoint.ycoor) {
-                    System.out.println("You found me, sending a message back to the train");
+                    System.out.println("You found me, sending a message back to the train" + this);
                     m.addToPath(this);
                     m.seekPath = false;
                     m.validPath = true;
                     train.receiveMessage(m);
                 }
                 //You are looking for a path from here
-                else if (m.seekPath && !m.validPath) {
+                else if (m.seekPath && !m.validPath && m.path.size() == 0) {
                     if (right != null) {
                         m.travelingRight = true;
                         m.stationSent = this;
