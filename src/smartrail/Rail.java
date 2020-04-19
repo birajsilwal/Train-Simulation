@@ -34,19 +34,19 @@ public class Rail implements Runnable{
 
     }
 
-    public void setLeft(Rail l){
+    protected void setLeft(Rail l){
         left = l;
     }
-    public void setRight(Rail r){
+    protected void setRight(Rail r){
         right = r;
     }
-    public void setEndPoint(Point p){
+    protected void setEndPoint(Point p){
         endPoint = p;
     }
     public Point getStartPoint(){
         return startPoint;
     }
-    public synchronized void receiveMessage(Message m){
+    protected synchronized void receiveMessage(Message m){
         inbox.add(m);
         notifyAll();
     }

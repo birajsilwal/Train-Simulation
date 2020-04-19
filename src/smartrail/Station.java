@@ -12,19 +12,8 @@ public class Station extends Rail{
 
     public Station(int n, Point point,Train t) {
         super(n,point,t);
-//        name = n;
-//        left = null;
-//        right = null;
-//        inbox = new LinkedBlockingQueue<Message>();
-        isSource = false;
-        isDestination = false;
-
-        // method drawStation() - new method - option 2
-//        Rectangle rectangle = new Rectangle(80, 80);
-//        rectangle.setFill(Color.BLACK);
-//        rectangle.setX(point.xcoor);
-//        rectangle.setY(point.ycoor);
-
+//        isSource = false;
+//        isDestination = false;
     }
 
     public Point getLocation(){
@@ -47,15 +36,14 @@ public class Station extends Rail{
         seekMessage.validPath = false;
         return seekMessage;
     }
-    public synchronized void selectedAsTarget(){
+    protected synchronized void selectedAsTarget(){
         //When selected, create a message and send it to the train
         Message message = createMessage();
         train.receiveMessage(message);
-//        System.out.println("Exit selectAsTarget");
     }
 
     @Override
-    public synchronized void receiveMessage(Message message){
+    protected synchronized void receiveMessage(Message message){
 //        System.out.println(this + " received message");
         inbox.add(message);
         notifyAll();

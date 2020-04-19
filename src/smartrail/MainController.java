@@ -16,54 +16,69 @@ import java.util.Set;
 
 import static smartrail.Constants.*;
 
+/**
+ * Driver for the program.
+ * Initializes the objects and creates a train system based on the input from the user.
+ * When running the program use java -jar SmartRail.jar _nameOfTrack.txt_
+ *
+ * The train is going to start on the root station of the track wherever it may lay,
+ * most likely in the top left coordinate.
+ *
+ * Use mouse input to choose a track for the train to travel to.
+ *
+ * The train can only move from left/right to right/left and it will not make
+ * any hard turns on a switch if it were to cross one.
+ *
+ * When you are done playing, close the window and close the program.
+ */
 public class MainController extends Application {
-    private Display display;
+    private Display display; //The GUI object
     private Pane pane;
     private BorderPane borderPane;
     private Group group;
     private AnchorPane mainPane;
-    private FileLoader fileLoader;
-    private Train train = new Train();
+    private FileLoader fileLoader; //Reads in the .txt file provided
+    private Train train = new Train(); //The star of the show, there's only one
 
+    /**
+     * The driver method
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     *
+     * @param primaryStage required for the javafx GUI
+     * @throws Exception just in case
+     *
+     * Makes the train and passes it to the FileLoader to make the track
+     * The track is stored in root
+     * The train is given a starting location and then the threads are started
+     *
+     * The objects are then passed to the initGUI() for reference purposes
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         Train train = new Train();
         fileLoader = new FileLoader(train);
         fileLoader.readInTrack(train);
-        //fileLoader.readTrack - reading config here
-
 
         Station root = fileLoader.getRailSystem();
 
         train.setStartRail(root);
-
 
         Thread trainThread = new Thread(train);
         trainThread.start();
 
         startThreads(root);
         initGUI(root, primaryStage,train);
-//        while(thisStation.right != null) {
-//            System.out.println(thisStation);
-//            if(thisStation.rightSwitch != null){
-//                thisStation = thisStation.rightSwitch;
-//            }else{
-//                thisStation = thisStation.right;
-//            }
-//        }
-//        Station s = (Station)thisStation;
-//        s.selectedAsTarget();
-
-        //initGUI(root, primaryStage);
-        printThreads();
-        //printRails(station);
     }
 
-
+    /*
+    Recurses through the railSystem and starts any connected piece of the track
+     */
     private void startThreads(Rail root){
         Thread newThread = new Thread(root);
         root.running = true;
@@ -72,10 +87,11 @@ public class MainController extends Application {
         if(root.rightSwitch != null && !root.rightSwitch.running){ startThreads(root.rightSwitch);}
         if(root.left != null && !root.left.running){ startThreads(root.left);}
         if(root.leftSwitch != null && !root.leftSwitch.running){ startThreads(root.leftSwitch);}
-//        if(!root.rightSwitch.running){ startThreads(root.rightSwitch);
-//        if(!root.leftSwitch.running){ startThreads(root.leftSwitch);
 
     }
+    /*
+    A method to show any of the threads that are running
+     */
     private void printThreads() {
         Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();
         System.out.println("Threads running " + threads.size());
@@ -84,13 +100,6 @@ public class MainController extends Application {
             System.out.println(th);
         }
     }
-    private void printRails(Rail root){
-        System.out.println(root);
-        if(root.right != null){
-            printRails(root.right);
-        }
-    }
-
 
     /* GUI starts from here */
     private synchronized void initGUI(Rail root, Stage primaryStage, Train t) {
