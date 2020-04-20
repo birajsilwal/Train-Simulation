@@ -1,17 +1,13 @@
+/**@author Biraj Silwal and Christopher James Shelton **/
+
 package smartrail;
 
 import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
 
-/**@author Biraj Silwal and Christopher James Shelton **/
-
+/* this class includes methods that are responsible to create and handle train object */
 public class Train implements Runnable{
 
-        private int trainId;
-        private Station source;
-        private Station destination;
-        private Boolean canChangeDirection;
-        private int speed;
         private Boolean travelRight;
         protected boolean isTraveling;
         protected Rail rail;
@@ -29,22 +25,11 @@ public class Train implements Runnable{
                 rail = null;
         }
 
-        public Train(Station s, Station d, Boolean ccd) {
-                s = source;
-                d = destination;
-                ccd = canChangeDirection;
-                inbox = new LinkedBlockingQueue<>();
-                path = new LinkedList<>();
-        }
-
         public synchronized void setStartRail(Rail r) {
-                //System.out.println("Setting start rail to: "+ r);
                 rail = r;
         }
 
         public synchronized void moveTrain(LinkedList<Rail> p) throws InterruptedException {
-                // TODO: if there is a valid path, then move the train
-                //System.out.println("We are in moveTrain, move right="+ travelRight);
                 path = p;
                 wait(1000);
                 // moving train to other track
@@ -59,16 +44,6 @@ public class Train implements Runnable{
                         TravelMessage m = new TravelMessage(path.removeLast(), rail);
                         destRail.receiveMessage(m);
                 }
-                // otherwise return false
-                // need positional data i.e. x y
-
-                // animation timer () create separate class display class
-
-                // have to talk to station
-                // abstract messaging class
-                // message type
-                //processMessage();//Put me back on wait
-
         }
 
         private synchronized void updateLocation(Rail newRail, Rail oldRail,boolean arrived) throws InterruptedException {
@@ -168,24 +143,12 @@ public class Train implements Runnable{
         }
 
 
-        private void printPath(Message m){
-                for(Rail r: m . path){
-                        System.out.println(r);
-                }
-        }
         // setter src and dest
         /**@return source gives us the location of source*/
         public Rail getCurrentLocation() { return rail; }
 
-        /**@return destination gives us the location of destination*/
-        public Station getDestination() { return destination; }
-
-        /**@return trainId gives us the unique id of the train*/
-        public int getTrainId() { return this.trainId; }
-
         /**@return track returns the track*/
         public Rail getRail() { return this.rail; }
-
 
         @Override
         public void run() {
@@ -200,6 +163,7 @@ public class Train implements Runnable{
                 //processMessage();
         }
 
+        /**@return path as a linked list*/
         public LinkedList<Rail> getPath() {
             return path;
         }

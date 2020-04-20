@@ -1,18 +1,18 @@
+/**@author Biraj Silwal and Christopher James Shelton **/
+
 package smartrail;
-import java.util.LinkedList;
 
 public class SeekMessage extends Message {
     Rail stationSent;
     Rail stationTarget;
     boolean validPath;
     boolean seekPath;
-    //boolean travelRight;
-    //LinkedList<Rail> path;//The path that the train follows
 
     public SeekMessage(){
         super();
         //path = new LinkedList<>();
     }
+
     public SeekMessage(SeekMessage m){
         super();
         for(Rail r: m.path){
@@ -24,20 +24,21 @@ public class SeekMessage extends Message {
         stationSent = m.stationSent;
         stationTarget = m.stationTarget;
     }
+
     public void addToPath(Rail rail){
         path.add(rail);
     }
+
     public void clearPath(){
         path = null;
     }
+
     public void setStationSent(Rail station) {
         stationSent = station;
     }
+
     public void setStationTarget(Rail station){
         stationTarget = station;
     }
 
 }
-
-
-// station, train, rail, switch all have to implement runnable

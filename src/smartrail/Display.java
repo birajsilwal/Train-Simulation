@@ -1,22 +1,25 @@
+/**@author Biraj Silwal and Christopher James Shelton **/
+
 package smartrail;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.PathTransition;
-import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.*;
 import javafx.util.Duration;
-
 import java.util.LinkedList;
 
+import static smartrail.Constants.*;
+
+// this class responsible for all of the GUI items like trains, track, stations are displayed into the pane
+// to make sure that margin and spaces are working correctly, we have added 1 to the co-ordinate (because some of
+// the co-ordinate are 0) and multiplied with 70.
 public class Display extends AnimationTimer {
 
-    private FlowPane flowPane = new FlowPane();
     private Pane pane;
-    private AnchorPane mainPane;
     private Rail rail;
     private LinkedList<Station> selectedStations;
     private Train train;
@@ -24,7 +27,7 @@ public class Display extends AnimationTimer {
     private LinkedList<Rail> rails;
     private LinkedList<Station> stations;
 
-    Display(Pane p, Rail root, Train t){
+    Display(Pane p, Rail root, Train t) {
         train = t;
         pane = p;
         rail = root;
@@ -38,6 +41,7 @@ public class Display extends AnimationTimer {
         setRail();
         selectedStations = new LinkedList<>();
     }
+
     /*
     Creates three objects that can be iterated through and displayed
      */
@@ -63,6 +67,7 @@ public class Display extends AnimationTimer {
                 r.leftSwitch != last) makeRailLists(r.leftSwitch, r);
     }
 
+    /*this method displays the track between two statins*/
     public void setRail() {
         for (Rail rail : rails) {
             System.out.println("rails " + rail);
@@ -71,14 +76,15 @@ public class Display extends AnimationTimer {
 
             Rectangle rectangle = new Rectangle(70, 50);
             rectangle.setFill(new ImagePattern(image));
-            rectangle.setTranslateX((rail.getStartPoint().xcoor + 1) * 70);
-            rectangle.setTranslateY((rail.getStartPoint().ycoor + 1) * 70);
+            rectangle.setTranslateX((rail.getStartPoint().xcoor + 1) * HORIZONTAL_DISTANCE);
+            rectangle.setTranslateY((rail.getStartPoint().ycoor + 1) * VERTICAL_DISTANCE);
             rectangle.setArcWidth(20);
 
             pane.getChildren().add(rectangle);
         }
     }
 
+    /*this methods uses LinkedList of stations and passes station to setStation method */
     private void drawStation() {
         for (Station station : stations) {
             System.out.println("Station " + station);
@@ -86,6 +92,8 @@ public class Display extends AnimationTimer {
         }
     }
 
+    /* this method is called from drawStation method and is responsible to draw station by displaying image*/
+    /* on click listener is implemented into this method where stations are created */
     private Rectangle setStation(Station station) {
         String imagePath = ("Image/station.png");
         Image image = new Image(imagePath);
@@ -94,11 +102,11 @@ public class Display extends AnimationTimer {
 
         // if its a right sided station then add 1 to its xcoor
         if (station.startPoint.xcoor > 0) {
-            rectangle.setTranslateX((station.startPoint.xcoor + 1) * 70);
+            rectangle.setTranslateX((station.startPoint.xcoor + 1) * HORIZONTAL_DISTANCE);
         } else {
-            rectangle.setTranslateX(station.startPoint.xcoor * 70);
+            rectangle.setTranslateX(station.startPoint.xcoor * HORIZONTAL_DISTANCE);
         }
-        rectangle.setTranslateY((station.startPoint.ycoor + 1) * 70);
+        rectangle.setTranslateY((station.startPoint.ycoor + 1) * VERTICAL_DISTANCE);
 
         rectangle.setOnMouseClicked(event -> {
             selectedStations.add(station);
@@ -110,6 +118,7 @@ public class Display extends AnimationTimer {
         return rectangle;
     }
 
+    /*this method displayed switches by using its starting and ending point*/
     private void drawSwitches() {
         for(Switch sw : switches) {
             Point switchStartPoint = sw.startPoint;
@@ -123,12 +132,11 @@ public class Display extends AnimationTimer {
 
     public void drawSwitchTrack(Point switchStartPoint, Point switchEndPoint) {
         Line switchTrack = new Line();
-//        Rectangle switchTrack = new Rectangle();
-        switchTrack.setStartX((switchStartPoint.xcoor) * 70);
-        switchTrack.setStartY((switchStartPoint.ycoor + 1) * 70);
+        switchTrack.setStartX((switchStartPoint.xcoor) * HORIZONTAL_DISTANCE);
+        switchTrack.setStartY((switchStartPoint.ycoor + 1) * VERTICAL_DISTANCE);
 
-        switchTrack.setEndX((switchEndPoint.xcoor + 1) * 70);
-        switchTrack.setEndY((switchEndPoint.ycoor + 1) * 70);
+        switchTrack.setEndX((switchEndPoint.xcoor + 1) * HORIZONTAL_DISTANCE);
+        switchTrack.setEndY((switchEndPoint.ycoor + 1) * VERTICAL_DISTANCE);
 
         switchTrack.setStroke(Color.RED);
         switchTrack.setStrokeWidth(10);
@@ -136,6 +144,8 @@ public class Display extends AnimationTimer {
         pane.getChildren().add(switchTrack);
     }
 
+    /* this method is responsible for setting up source and destination
+    * it moves train from source station and destination station*/
     public void setSourceDestination(Station station) {
         System.out.println("This is the clicked station: " + station);
         int finalDestinationX = station.startPoint.xcoor;
@@ -146,10 +156,10 @@ public class Display extends AnimationTimer {
         int startXCoor = train.getCurrentLocation().startPoint.xcoor;
         int startYCoor = train.getCurrentLocation().startPoint.ycoor;
 
-        int startXTranslation = (train.getCurrentLocation().startPoint.xcoor + 1) * 70;
-        int startYTranslation = (train.getCurrentLocation().startPoint.ycoor + 1) * 70;
+        int startXTranslation = (train.getCurrentLocation().startPoint.xcoor + 1) * HORIZONTAL_DISTANCE;
+        int startYTranslation = (train.getCurrentLocation().startPoint.ycoor + 1) * VERTICAL_DISTANCE;
 
-        int endX = (station.startPoint.xcoor) * 70;
+        int endX = (station.startPoint.xcoor) * HORIZONTAL_DISTANCE;
         int endY = (station.startPoint.ycoor);
 
         String imagePath = ("Image/trainLeft.png");
@@ -171,9 +181,9 @@ public class Display extends AnimationTimer {
         if (endY > startYCoor) {
             for (Rail currRail : pathFinal) {
                 if (currRail instanceof Switch) {
-                    path.getElements().add(new LineTo((currRail.startPoint.xcoor ) * 70, currRail.startPoint.ycoor));
-                    path.getElements().add(new LineTo(currRail.endPoint.xcoor * 70, currRail.endPoint.ycoor * 70));
-                    path.getElements().add(new LineTo(finalDestinationX * 70, finalDestinationY * 70));
+                    path.getElements().add(new LineTo((currRail.startPoint.xcoor ) * HORIZONTAL_DISTANCE, currRail.startPoint.ycoor));
+                    path.getElements().add(new LineTo(currRail.endPoint.xcoor * HORIZONTAL_DISTANCE, currRail.endPoint.ycoor * VERTICAL_DISTANCE));
+                    path.getElements().add(new LineTo(finalDestinationX * HORIZONTAL_DISTANCE, finalDestinationY * VERTICAL_DISTANCE));
                     System.out.println("endX: " + finalDestinationX);
                     System.out.println("endY: " + finalDestinationY);
                 }
@@ -189,10 +199,8 @@ public class Display extends AnimationTimer {
         pathTransition.play();
     }
 
-
     @Override
     public void handle(long now) {
 
     }
-
 }

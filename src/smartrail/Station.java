@@ -1,21 +1,15 @@
+/**@author Biraj Silwal and Christopher James Shelton **/
+
 package smartrail;
 
-public class Station extends Rail{
-
-//    private int name;
-//    private LinkedBlockingQueue<Message> inbox;
-//    private Rail left;
-//    private Rail right;
-//    private Train train;
-    private Boolean isSource;
-    private Boolean isDestination;
+/*this class is responsible for managing stations*/
+public class Station extends Rail {
 
     public Station(int n, Point point,Train t) {
         super(n,point,t);
-//        isSource = false;
-//        isDestination = false;
     }
 
+    /**@return start location, as a point object, of a station*/
     public Point getLocation(){
         return startPoint;
     }
@@ -28,7 +22,7 @@ public class Station extends Rail{
         right = rail;
     }
 
-    private Message createMessage(){
+    private Message createMessage() {
         SeekMessage seekMessage = new SeekMessage();
         seekMessage.setStationSent(this);
         seekMessage.stationTarget= this;
@@ -36,19 +30,19 @@ public class Station extends Rail{
         seekMessage.validPath = false;
         return seekMessage;
     }
-    protected synchronized void selectedAsTarget(){
+
+    protected synchronized void selectedAsTarget() {
         //When selected, create a message and send it to the train
         Message message = createMessage();
         train.receiveMessage(message);
     }
 
     @Override
-    protected synchronized void receiveMessage(Message message){
-//        System.out.println(this + " received message");
+    protected synchronized void receiveMessage(Message message) {
         inbox.add(message);
         notifyAll();
-//        processMessage();
     }
+
     @Override
     public synchronized void processMessage() {
         while (inbox.isEmpty()) {
@@ -60,7 +54,6 @@ public class Station extends Rail{
         }
 
         if(inbox.peek() instanceof SeekMessage) {
-//            System.out.println(this + " has a seek message");
             SeekMessage m = (SeekMessage) inbox.remove();
 
             notifyAll();
@@ -97,29 +90,24 @@ public class Station extends Rail{
                 }
             }
         }
-        else{
+        else {
             TravelMessage m = (TravelMessage)inbox.remove();
             if(!hasTheTrain && m.newRail == this){
                 System.out.println("Yay! You made it to the station");
                 m.validDestination = true;
                 m.arrivedAtDestination = true;
-            }else{
+            } else {
                 System.out.println("This is not the right station!");
                 m.validDestination = false;
             }
+
             train.receiveMessage(m);
 
         }
     }
-//    @Override
-//    public void run() {
-////        System.out.println(this + " is running");
-//        while (Thread.currentThread().isAlive()) {
-//            processMessage();
-//        }
-//    }
+
     @Override
-    public String toString(){
+    public String toString() {
         if (right != null) {
             return "Station: "+name + " [" + startPoint.xcoor + "," + startPoint.ycoor + "]->[" + right.startPoint.xcoor + "," + right.startPoint.ycoor + "]";
         } else {

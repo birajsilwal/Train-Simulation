@@ -1,3 +1,5 @@
+/**@author Biraj Silwal and Christopher James Shelton **/
+
 package smartrail;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -37,19 +39,24 @@ public class Rail implements Runnable{
     protected void setLeft(Rail l){
         left = l;
     }
+
     protected void setRight(Rail r){
         right = r;
     }
+
     protected void setEndPoint(Point p){
         endPoint = p;
     }
+
     public Point getStartPoint(){
         return startPoint;
     }
+
     protected synchronized void receiveMessage(Message m){
         inbox.add(m);
         notifyAll();
     }
+
     public synchronized void processMessage() {
         while (inbox.isEmpty()) {
             try {
@@ -114,6 +121,7 @@ public class Rail implements Runnable{
         SplitMessage sm = new SplitMessage(m.path);
         train.receiveMessage(sm);
     }
+
     @Override
     public String toString() {
         if (endPoint != null) {

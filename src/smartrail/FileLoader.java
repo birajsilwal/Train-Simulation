@@ -1,13 +1,15 @@
+/**@author Biraj Silwal and Christopher James Shelton **/
+
 package smartrail;
 
 import javafx.scene.layout.Pane;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.LinkedList;
 import java.util.List;
 
+/*this class reads the main configuration file from the resources folder*/
 public class FileLoader {
 
     protected List<LinkedList<Rail>> railSystem;
@@ -132,14 +134,7 @@ public class FileLoader {
                 }
             }
         }
-//        for(Station s:stations){
-//            System.out.println("Station: " +s);
-//        }
-        //Set the switches
 
-        //I need to alternate the switch connections:
-        // - down to the next rail's y, X+1
-        // - -> down the the next rail's y, X-1;
         boolean downRight = true;
         for(LinkedList<Rail> rails : railSystem){
             for(Rail rail : rails) {
@@ -185,33 +180,15 @@ public class FileLoader {
                 }
             }
         }
-//        for(LinkedList<Rail> rails: railSystem){
-//            for(Rail r: rails){
-//                System.out.println("rail " +r);
-//            }
-//        }
-//        for(Switch s:switches){
-//            System.out.println("Switch: " +s);
-//        }
-//        initGUI(railSystem, stations, switches);
-        getSwitches1(switches);
-
     }
 
-    public void getSwitches1(List<Switch> switchesList) {
-//        System.out.println("This is the size of the switches: " + stations.size());
-//        System.out.println("This is switches ll: " + switchesList);
 
-    }
-
+    /**@return list of stations */
     public List<Station> getStation() {
         return stations;
     }
 
-    public List<Switch> getSwitches() {
-        return switches;
-    }
-
+    /**@return station */
     protected Station getRailSystem(){
         return rootStation;
     }

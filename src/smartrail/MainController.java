@@ -1,19 +1,14 @@
+/**@author Biraj Silwal and Christopher James Shelton **/
+
 package smartrail;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
-
 import static smartrail.Constants.*;
 
 /**
@@ -35,8 +30,6 @@ public class MainController extends Application {
     private Display display; //The GUI object
     private Pane pane;
     private BorderPane borderPane;
-    private Group group;
-    private AnchorPane mainPane;
     private FileLoader fileLoader; //Reads in the .txt file provided
     private Train train = new Train(); //The star of the show, there's only one
 
@@ -89,6 +82,7 @@ public class MainController extends Application {
         if(root.leftSwitch != null && !root.leftSwitch.running){ startThreads(root.leftSwitch);}
 
     }
+
     /*
     A method to show any of the threads that are running
      */
@@ -105,15 +99,11 @@ public class MainController extends Application {
     private synchronized void initGUI(Rail root, Stage primaryStage, Train t) {
         pane = new Pane();
         borderPane = new BorderPane();
-        mainPane = new AnchorPane();
-        group = new Group();
 
         borderPane.setCenter(pane);
-//        borderPane.setPadding(new Insets(50, 50, 0,50));
         Scene scene = new Scene(borderPane, widthOfMainPane, heightOfMainPane);
         primaryStage.setTitle("SmartRail ");
         primaryStage.setScene(scene);
-//        display = new Display(pane, root, fileLoader.getStation(), fileLoader.getSwitches(),train);
         display = new Display(pane,root,t);
         display.start();
         primaryStage.show();

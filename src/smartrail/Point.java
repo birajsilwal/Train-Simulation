@@ -1,3 +1,5 @@
+/**@author Biraj Silwal and Christopher James Shelton **/
+
 package smartrail;
 
 /*class is used to mark the beginning coordinates of object*/
