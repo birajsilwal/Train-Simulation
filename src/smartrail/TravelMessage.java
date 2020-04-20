@@ -18,5 +18,4 @@ public class TravelMessage extends Message {
         validDestination = false;
         arrivedAtDestination = false;
     }
-
 }
