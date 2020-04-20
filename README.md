@@ -1,6 +1,6 @@
-#SmartRail
+# SmartRail
 
-##Chris Shelton & Biraj Silwal
+## Chris Shelton & Biraj Silwal
 
 ### About
 SmartRail is a simulation of light rail network built using JavaFx, JAVA concurrency, and JAVA thread.
@@ -36,6 +36,11 @@ For modularity and flexibility reasons, each component of the light rail system 
 * Each component (train, tracks, stations, etc.)  is an active object running on its own thread.
 * Each  component can only talk to its immediate neighbors. (You  should not call a method on a neighboring object that calls a method on the next object that calls a method on the next object,  and so on.)  Pass some sort of message to the neighbor instead and let the neighbor handle the message on its own thread.
 * Used concurrent data structures and synchronization to avoid deadlock and race conditions.  Suggestion:  give every object a BlockingQueue of messages as an “inbox” and just have everything for that object coordinated through processing the messages one at a time.
+
+### Docs
+
+* Object-Oriented Design file is inside the Docs folder
+* Other resources like config files and images are inside Resources folder.
 
 ### Known Bugs
 
